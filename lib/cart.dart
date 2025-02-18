@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'ControllerPage.dart';
+import 'PaymentPage.dart'; // Import PaymentPage
+import 'setting.dart'; // Import other pages as needed
 
-import 'PaymentPage.dart';
+import 'OrderHistoryPage.dart';
 
-class cart extends StatelessWidget {
+
+class cart extends StatefulWidget {
+  @override
+  _CartState createState() => _CartState();
+}
+
+class _CartState extends State<cart> {
+  int _currentIndex = 1; // Default selected index for the cart screen
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +55,7 @@ class cart extends StatelessWidget {
 
               // Cart Item 2
               CartItem(
-                imageUrl: "https://m.media-amazon.com/images/S/aplus-media/sota/c011f29c-229a-4aee-afe3-eb5ad989b7d0.__CR0,0,970,600_PT0_SX970_V1___.jpg",
+                imageUrl: "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
                 title: "juhayna pure juice",
                 price: "10.00 EGP",
                 description: "Refreshingly sweet and tangy, made from natural pineapple for a tropical taste.",
@@ -77,6 +88,71 @@ class cart extends StatelessWidget {
             ],
           ),
         ),
+      ),
+
+      // Bottom Navigation Bar (Copied from the home screen)
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex, // Track the selected index
+        selectedItemColor: Colors.blue, // Highlight the selected icon in blue
+        unselectedItemColor: Colors.grey, // Unselected icons in grey
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.trolley),
+            label: 'Controller',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Order History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index; // Update the selected index
+          });
+
+          // Handle tap events for bottom navigation icons
+          if (index == 4) {
+            // Navigate to Settings screen when the Settings icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const setting()),
+            );
+          } else if (index == 2) {
+            // Navigate to Controller Page when the controller icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ControllerPage()),
+            );
+          } else if (index == 3) {
+            // Navigate to Order History Page when the history icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
+            );
+          } else if (index == 1) {
+            // Navigate to Cart Page when the cart icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => cart()),
+            );
+          } else if (index == 0) {
+            // Navigate to Home Page when the home icon is clicked
+            Navigator.pop(context); // Go back to the home screen
+          }
+        },
       ),
     );
   }

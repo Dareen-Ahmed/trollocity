@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'forgotpassword.dart'; // تأكد من وجود هذه الصفحة
 import 'home.dart'; // تأكد من استيراد شاشة الرئيسية
+import 'market.dart'; // Import the MarketChooserScreen
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -100,11 +101,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // Navigate to Home screen when "Verify Account" or "Sign In" is clicked
+                        // Navigate to Markets screen when "Verify Account" or "Sign In" is clicked
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const home(),
+                            builder: (context) => const market(),
                           ),
                         );
                       }
@@ -191,6 +192,7 @@ class _AuthScreenState extends State<AuthScreen> {
           if (isPassword && !RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$").hasMatch(value)) {
             return 'Password must contain at least 8 characters, including letters and numbers';
           }
+
           return null;
         },
       ),

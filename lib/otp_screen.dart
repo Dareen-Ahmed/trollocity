@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // لاستيراد الـ inputFormatters
 import 'change_password.dart';
+import 'market.dart'; // Import the MarketChooserScreen
 
 class otp_screen extends StatefulWidget {
   const otp_screen({super.key, required this.email});
@@ -97,9 +98,12 @@ class _OtpScreenState extends State<otp_screen> {
             ElevatedButton(
               onPressed: isButtonEnabled
                   ? () {
-                Navigator.push(
+                // Navigate to MarketChooserScreen after OTP verification
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => change_password()),
+                  MaterialPageRoute(
+                    builder: (context) => const market(),
+                  ),
                 );
               }
                   : null, // تعطيل الزر إذا لم يتم إدخال جميع الأرقام

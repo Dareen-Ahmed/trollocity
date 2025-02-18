@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/setting.dart';
-import 'package:graduation/wishlist.dart';
-
+import 'setting.dart';
+import 'wishlist.dart';
 import 'ChatBotScreen.dart';
 import 'InstructionPage.dart';
 import 'Mango.dart';
@@ -90,8 +89,6 @@ class home extends StatelessWidget {
               MaterialPageRoute(builder: (context) => cart()),
             );
           }
-
-
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -111,12 +108,14 @@ class home extends StatelessWidget {
     );
   }
 }
+
 class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomePageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false, // Remove the back arrow
       backgroundColor: Colors.teal.shade700,
       elevation: 0,
       titleSpacing: 16,
@@ -279,8 +278,6 @@ class FreshProducts extends StatelessWidget {
         ),
       ),
     );
-
-
   }
 }
 
@@ -368,7 +365,6 @@ class BigAdCard extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
 
@@ -467,5 +463,4 @@ class ShopByCategory extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+ // Import the Create Account Screen
+import 'create_account_screen.dart';
+import 'setting.dart'; // Import the setting page itself (if needed)
+import 'wishlist.dart'; // Import other pages as needed
+import 'ChatBotScreen.dart';
+import 'InstructionPage.dart';
+import 'Mango.dart';
+import 'OrderHistoryPage.dart';
+import 'PersonalCarePage.dart';
+import 'SpecialOffersPage.dart';
+import 'Strawberry.dart';
+import 'cart.dart';
+import 'notification.dart';
 
-class setting extends StatelessWidget {
+class setting extends StatefulWidget {
   const setting({super.key});
+
+  @override
+  _SettingState createState() => _SettingState();
+}
+
+class _SettingState extends State<setting> {
+  int _currentIndex = 4; // Default selected index for the Settings screen
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +87,19 @@ class setting extends StatelessWidget {
                   const SettingsItem(icon: Icons.lock, title: "Privacy & Policy"),
                   const SettingsItem(icon: Icons.help_outline, title: "Help"),
                   const SettingsItem(icon: Icons.edit, title: "Profile Settings", trailingText: "Edit Profile"),
-                  const SettingsItem(icon: Icons.logout, title: "Log out of account", trailingText: "Log Out?", isLogout: true),
+                  SettingsItem(
+                    icon: Icons.logout,
+                    title: "Log out of account",
+                    trailingText: "Log Out?",
+                    isLogout: true,
+                    onTap: () {
+                      // Navigate to the Create Account Screen when "Log out of account" is clicked
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AuthScreen()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -75,19 +107,69 @@ class setting extends StatelessWidget {
         ],
       ),
 
-      // Bottom Navigation Bar
+      // Bottom Navigation Bar (Copied from the home screen)
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex, // Track the selected index
+        selectedItemColor: Colors.blue, // Highlight the selected icon in blue
+        unselectedItemColor: Colors.grey, // Unselected icons in grey
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.trolley),
+            label: 'Controller',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Order History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
         ],
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index; // Update the selected index
+          });
+
+          // Handle tap events for bottom navigation icons
+          if (index == 4) {
+            // Navigate to Settings screen when the Settings icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const setting()),
+            );
+          } else if (index == 2) {
+            // Navigate to Instruction Page when the controller icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => InstructionPage()),
+            );
+          } else if (index == 3) {
+            // Navigate to Order History Page when the history icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
+            );
+          } else if (index == 1) {
+            // Navigate to Cart Page when the cart icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => cart()),
+            );
+          } else if (index == 0) {
+            // Navigate to Home Page when the home icon is clicked
+            Navigator.pop(context); // Go back to the home screen
+          }
+        },
       ),
     );
   }
@@ -99,6 +181,7 @@ class SettingsItem extends StatelessWidget {
   final String title;
   final String? trailingText;
   final bool isLogout;
+  final VoidCallback? onTap;
 
   const SettingsItem({
     super.key,
@@ -106,6 +189,7 @@ class SettingsItem extends StatelessWidget {
     required this.title,
     this.trailingText,
     this.isLogout = false,
+    this.onTap,
   });
 
   @override
@@ -119,9 +203,7 @@ class SettingsItem extends StatelessWidget {
         style: TextStyle(color: isLogout ? Colors.red : Colors.blue, fontWeight: FontWeight.bold),
       )
           : null,
-      onTap: () {
-        // Define actions on tap if needed
-      },
+      onTap: onTap, // Use the provided onTap callback
     );
   }
 }
