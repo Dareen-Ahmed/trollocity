@@ -73,9 +73,12 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 20),
-                  if (!isLogin) _buildTextField(nameController, "First & Last Name", isName: true),
+                  if (!isLogin)
+                    _buildTextField(nameController, "First & Last Name",
+                        isName: true),
                   _buildTextField(emailController, "Email", isPassword: false),
-                  _buildTextField(passwordController, "Password", isPassword: true),
+                  _buildTextField(passwordController, "Password",
+                      isPassword: true),
                   if (isLogin)
                     Align(
                       alignment: Alignment.centerRight,
@@ -111,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color(0xFFde5902),
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     child: Text(isLogin ? "Sign In" : "Verify Account"),
@@ -161,14 +164,15 @@ class _AuthScreenState extends State<AuthScreen> {
             Container(
               height: 3,
               width: loginTab ? 50 : 80,
-              color: Colors.orange,
+              color: Color(0xFFde5902),
             ),
         ],
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, {bool isPassword = false, bool isName = false}) {
+  Widget _buildTextField(TextEditingController controller, String hint,
+      {bool isPassword = false, bool isName = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
@@ -177,7 +181,8 @@ class _AuthScreenState extends State<AuthScreen> {
         decoration: InputDecoration(
           hintText: hint,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -186,10 +191,14 @@ class _AuthScreenState extends State<AuthScreen> {
           if (isName && !RegExp(r"^[a-zA-Z ]+$").hasMatch(value)) {
             return 'Please enter a valid name';
           }
-          if (hint == 'Email' && !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(value)) {
+          if (hint == 'Email' &&
+              !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+                  .hasMatch(value)) {
             return 'Please enter a valid email';
           }
-          if (isPassword && !RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$").hasMatch(value)) {
+          if (isPassword &&
+              !RegExp(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$")
+                  .hasMatch(value)) {
             return 'Password must contain at least 8 characters, including letters and numbers';
           }
 

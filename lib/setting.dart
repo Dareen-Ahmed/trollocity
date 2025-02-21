@@ -47,8 +47,8 @@ class _SettingState extends State<setting> {
                 ),
                 const CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60',
+                  backgroundImage: AssetImage(
+                    'assets/profile.jpg',
                   ),
                 ),
                 const SizedBox(height: 10),

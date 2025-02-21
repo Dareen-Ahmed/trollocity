@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class Strawberry extends StatelessWidget {
@@ -17,10 +18,11 @@ class Strawberry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF317a8b), // Updated AppBar color
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back,
+              color: Colors.white), // Changed icon color for better contrast
           onPressed: () {
             Navigator.pop(context);
           },
@@ -34,7 +36,8 @@ class Strawberry extends StatelessWidget {
             // Image Container with No Clipping
             Center(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10), // Optional rounded corners
+                borderRadius:
+                    BorderRadius.circular(10), // Optional rounded corners
                 child: Image.network(
                   productImage,
                   height: 200, // Adjust height as needed
@@ -82,7 +85,11 @@ class Strawberry extends StatelessWidget {
                 ),
                 child: Text(
                   "Add to Wishlist",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Set text color to white
+                  ),
                 ),
               ),
             ),
