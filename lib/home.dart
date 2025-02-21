@@ -348,7 +348,7 @@
 //       elevation: 2,
 //       child: Column(
 //         children: [
-//           Image.network(imageUrl,
+//           Image.asset(imageUrl,
 //               height: 100,
 //               width: 150,
 //               fit: BoxFit.cover), // تم تعديل الحجم ليكون مناسباً
@@ -387,7 +387,7 @@
 //                   crossAxisAlignment: CrossAxisAlignment.start,
 //                   children: [
 //                     Text(
-//                       "Exclusive deals,\nbig savings shop now! 🛒💰",
+//                       "Exclusive deals,/nbig savings shop now! 🛒💰",
 //                       style: TextStyle(
 //                           fontSize: 16,
 //                           color: Colors.orange.shade900,
@@ -423,7 +423,7 @@
 //             ),
 //             Expanded(
 //               flex: 1,
-//               child: Image.network(
+//               child: Image.asset(
 //                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzmOnSqoXTMK1lel_2zIYifY6PzFBLzH3zgA&s",
 //                 fit: BoxFit.contain,
 //               ),
@@ -522,7 +522,7 @@
 //           Container(
 //             height: 150, // Set the desired height here
 //             width: double.infinity,
-//             child: Image.network(imageUrl, fit: BoxFit.cover),
+//             child: Image.asset(imageUrl, fit: BoxFit.cover),
 //           ),
 //           Padding(
 //             padding: const EdgeInsets.all(8.0),
@@ -851,7 +851,7 @@ class FreshProducts extends StatelessWidget {
 
             // Fresh Pineapple (❌ Not Clickable)
             const ProductCard(
-              imageUrl: "assets/HomePage/pineapple.jpg",
+              imageUrl: 'assets/HomePage/pineapple.jpg',
               title: "Fresh Pineapple",
             ),
             const SizedBox(width: 10),
@@ -879,9 +879,9 @@ class ProductCard extends StatelessWidget {
       elevation: 2,
       child: Column(
         children: [
-          Image.network(imageUrl,
-              height: 100,
-              width: 150,
+          Image.asset(imageUrl,
+              height: 150,
+              width: 190,
               fit: BoxFit.cover), // تم تعديل الحجم ليكون مناسباً
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -952,7 +952,7 @@ class BigAdCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Exclusive deals, big savings \nshop now! 🛒💰',
+                        'Exclusive deals, big savings /nshop now! 🛒💰',
                         style: TextStyle(
                           fontSize: 26,
                           color: AppStyles.textDark,
@@ -972,8 +972,8 @@ class BigAdCard extends StatelessWidget {
                     topLeft: Radius.circular(0),
                     topRight: Radius.circular(6),
                   ),
-                  child: Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzmOnSqoXTMK1lel_2zIYifY6PzFBLzH3zgA&s',
+                  child: Image.asset(
+                    'assets/HomePage/special.jpg',
                     width: 300,
                     height: 334.7,
                     fit: BoxFit.cover,
@@ -999,14 +999,12 @@ class ShopByCategory extends StatelessWidget {
       child: Column(
         children: [
           _buildCategoryCard(
-            imageUrl:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqI08VdWhiAMG-rjTjbOTJNKwVM-r9S83F7DYjHfKmL6jmAiENATQ5SPpeqdB9KWxihmI&usqp=CAU",
+            imageUrl: "assets/HomePage/breads.jpg",
             title: "Bread & Bakery",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd6KosxC55n5NEboPmpH8Mv5TIMGJ8a8eXrA&s",
+            imageUrl: "assets/HomePage/fruits.jpg",
             title: "Fresh Fruits",
           ),
           const SizedBox(height: 10),
@@ -1020,45 +1018,38 @@ class ShopByCategory extends StatelessWidget {
               );
             },
             child: _buildCategoryCard(
-              imageUrl:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFqkKk2rYarpUy_1tjbMfD4fvN_AF3gbBbhQ&s",
+              imageUrl: "assets/HomePage/personalcare.jpg",
               title: "Personal Care Products",
             ),
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://static.vecteezy.com/system/resources/previews/027/521/085/non_2x/fresh-beef-isolated-on-transparent-background-raw-meat-cut-out-generative-ai-png.png",
+            imageUrl: "assets/HomePage/meats.jpg",
             title: "Meat",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwcLFO4mJxm6czf0WJh8N_R2DG7W6VrkhkgA&s",
+            imageUrl: "assets/HomePage/chickens.jpg",
             title: "Chicken",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQUWHNYpy8O5PyytvVnRH5TXcKkG8GQPUzA&s",
+            imageUrl: "assets/HomePage/vegetables.jpg",
             title: "Fresh Vegetables",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://p.turbosquid.com/ts-thumb/xk/hrSnLd/LfEWNSjQ/thumbnail_1/png/1435170651/1920x1080/fit_q87/2a06cb1ae13ae352dfbca35619bc89b9268a5aaa/thumbnail_1.jpg",
+            imageUrl: "assets/HomePage/Snacks.jpg",
             title: "Snacks",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://sbhf.com/application/files/9215/3925/3753/IQF-Pasta-header2.jpg",
+            imageUrl: "assets/HomePage/pasta.jpg",
             title: "Rice&Pasta",
           ),
           const SizedBox(height: 10),
           _buildCategoryCard(
-            imageUrl:
-                "https://media.istockphoto.com/id/1127182311/photo/fruit-juices.jpg?s=612x612&w=0&k=20&c=M52yyMvgFUNkPtN9PACB9auB5uuA1CD6zcRsCTX8JsM=",
+            imageUrl: "assets/HomePage/juice.jpg",
             title: "Fresh Juice",
           ),
         ],
@@ -1073,14 +1064,16 @@ class ShopByCategory extends StatelessWidget {
         children: [
           // Increase the height of the image box here
           Container(
-            height: 150, // Set the desired height here
+            color: Color(0xFFffffff),
+            height: 200, // Set the desired height here
             width: double.infinity,
-            child: Image.network(imageUrl, fit: BoxFit.cover),
+            child: Image.asset(imageUrl, fit: BoxFit.contain),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(title,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 28, fontWeight: FontWeight.w600)),
           ),
         ],
       ),

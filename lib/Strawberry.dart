@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class Strawberry extends StatelessWidget {
@@ -38,7 +37,7 @@ class Strawberry extends StatelessWidget {
               child: ClipRRect(
                 borderRadius:
                     BorderRadius.circular(10), // Optional rounded corners
-                child: Image.network(
+                child: Image.asset(
                   productImage,
                   height: 200, // Adjust height as needed
                   width: double.infinity, // Makes it stretch properly
