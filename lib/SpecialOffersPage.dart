@@ -132,11 +132,13 @@
 
 import 'package:flutter/material.dart';
 
+import 'app_styles.dart';
+
 class SpecialOffersPage extends StatelessWidget {
   final List<Map<String, String>> specialOffers = [
     {
       "imageUrl":
-          "https://m.media-amazon.com/images/S/aplus-media/sota/c5519ab8-adb3-4fb5-95c3-9b2afaae4623._CR0,0,300,300_PT0_SX300_V1.jpg",
+          "https://m.media-amazon.com/images/S/aplus-media/sota/c5519ab8-adb3-4fb5-95c3-9b2afaae4623.__CR0,0,300,300_PT0_SX300_V1___.jpg",
       "title": "Al Doha Rice 5 kg",
       "discount": "-50%",
       "price": "75 EGP",
@@ -188,17 +190,25 @@ class SpecialOffersPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Offers",
-          style: TextStyle(color: Colors.white), // Set text color to white
+          style: TextStyle(
+            color: AppStyles.textLight,
+            fontFamily: 'Inter',
+            fontSize: 36,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        backgroundColor: Color(0xFF317a8b), // Set the app bar color
-        iconTheme:
-            IconThemeData(color: Colors.white), // Set back arrow color to white
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppStyles.textLight, // You can change this color as needed
+            size: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+          style: IconButton.styleFrom(
+              backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
         ),
+        backgroundColor: Color(0xFF317A8B),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -227,7 +237,7 @@ class SpecialOffersPage extends StatelessWidget {
                       child: Image.network(
                         product["imageUrl"]!,
                         width: double.infinity,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -237,7 +247,7 @@ class SpecialOffersPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(product["title"]!,
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15,)),
                         SizedBox(height: 5),
                         Row(
                           children: [
@@ -257,13 +267,14 @@ class SpecialOffersPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(product["discount"]!,
-                                  style: TextStyle(color: Colors.white)),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                             ),
                             SizedBox(width: 5),
                             Text(
                               product["price"]!,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                   color: Colors.red),
                             ),
                             SizedBox(width: 5),
@@ -271,6 +282,7 @@ class SpecialOffersPage extends StatelessWidget {
                               product["oldPrice"]!,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
+                                  fontSize: 14,
                                   color: Colors.grey),
                             ),
                           ],

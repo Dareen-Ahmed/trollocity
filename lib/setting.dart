@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
- // Import the Create Account Screen
-import 'create_account_screen.dart';
+import 'package:graduation/app_styles.dart';
+
+import 'create_account_screen.dart'; // Import the Create Account Screen
 import 'setting.dart'; // Import the setting page itself (if needed)
 import 'wishlist.dart'; // Import other pages as needed
 import 'ChatBotScreen.dart';
@@ -31,7 +32,7 @@ class _SettingState extends State<setting> {
         children: [
           // Top section with user info
           Container(
-            color: const Color(0xFF3E737B),
+            color: AppStyles.primarybackground,
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             child: Column(
               children: [
@@ -46,7 +47,7 @@ class _SettingState extends State<setting> {
                   ),
                 ),
                 const CircleAvatar(
-                  radius: 40,
+                  radius: 50,
                   backgroundImage: AssetImage(
                     'assets/profile.jpg',
                   ),
@@ -54,11 +55,11 @@ class _SettingState extends State<setting> {
                 const SizedBox(height: 10),
                 const Text(
                   "David Jerome",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 const Text(
                   "David.j@gmail.com",
-                  style: TextStyle(fontSize: 14, color: Colors.white70),
+                  style: TextStyle(fontSize: 16, color: Colors.white70),
                 ),
                 const SizedBox(height: 10),
               ],
@@ -111,7 +112,7 @@ class _SettingState extends State<setting> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex, // Track the selected index
-        selectedItemColor: Colors.blue, // Highlight the selected icon in blue
+        selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
         unselectedItemColor: Colors.grey, // Unselected icons in grey
         items: const [
           BottomNavigationBarItem(
@@ -200,7 +201,7 @@ class SettingsItem extends StatelessWidget {
       trailing: trailingText != null
           ? Text(
         trailingText!,
-        style: TextStyle(color: isLogout ? Colors.red : Colors.blue, fontWeight: FontWeight.bold),
+        style: TextStyle(color: isLogout ? Colors.red : AppStyles.primarybackground, fontWeight: FontWeight.bold),
       )
           : null,
       onTap: onTap, // Use the provided onTap callback

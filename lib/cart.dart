@@ -256,6 +256,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
 import 'ControllerPage.dart';
 import 'PaymentPage.dart'; // Import PaymentPage
 import 'setting.dart'; // Import other pages as needed
@@ -274,14 +275,15 @@ class _CartState extends State<cart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: AppStyles.primarybackground,
         title: Row(
           children: [
             Text("My Cart",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold)),
+                    fontSize: 36,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500)),
             SizedBox(width: 8),
             Icon(Icons.shopping_cart, color: Colors.white),
           ],
@@ -303,7 +305,7 @@ class _CartState extends State<cart> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.orange)),
+                      color: AppStyles.titleText)),
               SizedBox(height: 8),
               Text("Below is the list of items in your cart.",
                   style: TextStyle(color: Colors.black54)),
@@ -340,7 +342,7 @@ class _CartState extends State<cart> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: AppStyles.buttonColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
@@ -366,7 +368,7 @@ class _CartState extends State<cart> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex, // Track the selected index
-        selectedItemColor: Colors.teal, // Highlight the selected icon in blue
+        selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
         unselectedItemColor: Colors.grey, // Unselected icons in grey
         items: const [
           BottomNavigationBarItem(
@@ -502,7 +504,7 @@ class ReceiptSection extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange)),
+                    color: AppStyles.titleText)),
             SizedBox(height: 8),
             Text("Below is a list of your items.",
                 style: TextStyle(color: Colors.black54)),

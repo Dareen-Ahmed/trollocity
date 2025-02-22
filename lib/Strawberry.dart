@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
 
 class Strawberry extends StatelessWidget {
   final String productName;
@@ -16,6 +17,7 @@ class Strawberry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
         backgroundColor: Color(0xFF317a8b), // Updated AppBar color
         elevation: 0,

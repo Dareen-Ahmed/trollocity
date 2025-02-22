@@ -11,6 +11,7 @@ class AppStyles {
   
   static const Color titleText = Color(0xFFde5902); 
   static const Color textDark = Color(0xFF212121);
+  static const Color textGrey = Color(0xFF57636C);
   static const Color textLight = Color(0xFFFFFFFF);
 
   // Text Styles

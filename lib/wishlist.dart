@@ -119,21 +119,38 @@
 
 import 'package:flutter/material.dart';
 
+import 'app_styles.dart';
+
 class wishlist extends StatelessWidget {
   const wishlist({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xFF317A8B),
-        title: const Text(
-          "WishList",
-          style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500),
+        title: Text(
+          "Wishlist",
+          style: TextStyle(
+            color: AppStyles.textLight,
+            fontFamily: 'Inter',
+            fontSize: 36,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppStyles.textLight, // You can change this color as needed
+            size: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+          style: IconButton.styleFrom(
+              backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
+        ),
+        backgroundColor: Color(0xFF317A8B),
+        automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         child: Column(

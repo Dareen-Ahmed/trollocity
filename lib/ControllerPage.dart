@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
 import 'setting.dart'; // Import other pages as needed
 
 import 'OrderHistoryPage.dart';
@@ -16,15 +17,17 @@ class _ControllerPageState extends State<ControllerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: AppStyles.primarybackground,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: AppStyles.textLight),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text("Controller", style: TextStyle(color: Colors.white)),
+        title: Text("Controller",
+            style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500)),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -32,8 +35,8 @@ class _ControllerPageState extends State<ControllerPage> {
           // Updated Image
           Image.network(
             "https://img.freepik.com/vetores-gratis/carrinho-de-compras-com-marketing-conjunto-de-icones_24877-50248.jpg",
-            width: 250,
-            height: 250,
+            width: 300,
+            height: 300,
             errorBuilder: (context, error, stackTrace) {
               return Icon(Icons.broken_image, size: 100, color: Colors.grey);
             },
@@ -86,7 +89,8 @@ class _ControllerPageState extends State<ControllerPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex, // Track the selected index
-        selectedItemColor: Colors.blue, // Highlight the selected icon in blue
+        selectedItemColor:
+            AppStyles.primarybackground, // Highlight the selected icon in blue
         unselectedItemColor: Colors.grey, // Unselected icons in grey
         items: const [
           BottomNavigationBarItem(
@@ -155,7 +159,7 @@ class _ControllerPageState extends State<ControllerPage> {
       padding: const EdgeInsets.all(5.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
+          backgroundColor: AppStyles.buttonColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: EdgeInsets.all(15),
           minimumSize: Size(60, 60),

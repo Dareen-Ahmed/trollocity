@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
 import 'OrderDetailsPage.dart'; // Import Order Details Page
 import 'setting.dart'; // Import other pages as needed
 import 'wishlist.dart';
@@ -29,12 +30,36 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Order History")),
+    backgroundColor: AppStyles.backgroundColor,
+      appBar: AppBar(
+        title: Text(
+          "Order History",
+          style: TextStyle(
+            color: AppStyles.textLight,
+            fontFamily: 'Inter',
+            fontSize: 36,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppStyles.textLight,
+            size: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+          style: IconButton.styleFrom(
+              backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
+        ),
+        backgroundColor: AppStyles.primarybackground,
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Text("Below are your most recent orders", style: TextStyle(fontSize: 16, color: Colors.grey)),
+            Text("Below are your most recent orders",
+                style: TextStyle(fontSize: 16, color: AppStyles.textGrey)),
             SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
@@ -45,7 +70,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                       if (orders[index]["id"] == "1") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => OrderDetailsPage()),
+                          MaterialPageRoute(
+                              builder: (context) => OrderDetailsPage()),
                         );
                       }
                     },
@@ -68,7 +94,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex, // Track the selected index
-        selectedItemColor: Colors.blue, // Highlight the selected icon in blue
+        selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
         unselectedItemColor: Colors.grey, // Unselected icons in grey
         items: const [
           BottomNavigationBarItem(
