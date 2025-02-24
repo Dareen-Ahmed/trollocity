@@ -47,6 +47,9 @@ class home extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppStyles.backgroundColor,
+        selectedItemColor: AppStyles.primarybackground, 
+        unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -73,25 +76,25 @@ class home extends StatelessWidget {
         onTap: (index) {
           // Handle tap events for bottom navigation icons
           if (index == 4) {
-            // Navigate to Settings screen when the Settings icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const setting()),
             );
           } else if (index == 2) {
-            // Navigate to Instruction Page when the controller icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => InstructionPage()),
             );
           } else if (index == 3) {
-            // Navigate to Order History Page when the history icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => OrderHistoryPage()),
             );
           } else if (index == 1) {
-            // Navigate to Cart Page when the cart icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => cart()),
@@ -99,6 +102,7 @@ class home extends StatelessWidget {
           }
         },
       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the chatbot page when the button is pressed
@@ -339,6 +343,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+    color: Colors.white,
       elevation: 1,
       // Add these properties for rounded corners
       shape: RoundedRectangleBorder(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
+import 'package:graduation/home.dart';
 import 'OrderDetailsPage.dart'; // Import Order Details Page
 import 'setting.dart'; // Import other pages as needed
 import 'wishlist.dart';
@@ -32,6 +33,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     return Scaffold(
     backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
+      automaticallyImplyLeading: false,
         title: Text(
           "Order History",
           style: TextStyle(
@@ -41,18 +43,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: AppStyles.textLight,
-            size: 30,
-          ),
-          onPressed: () => Navigator.pop(context),
-          style: IconButton.styleFrom(
-              backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
-        ),
         backgroundColor: AppStyles.primarybackground,
-        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -92,6 +83,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
       // Bottom Navigation Bar (Copied from the home screen)
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppStyles.backgroundColor,
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex, // Track the selected index
         selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
@@ -126,32 +118,32 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           // Handle tap events for bottom navigation icons
           if (index == 4) {
             // Navigate to Settings screen when the Settings icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const setting()),
             );
           } else if (index == 2) {
             // Navigate to Instruction Page when the controller icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => InstructionPage()),
             );
-          } else if (index == 3) {
-            // Navigate to Order History Page when the history icon is clicked
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-            );
           } else if (index == 1) {
             // Navigate to Cart Page when the cart icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => cart()),
             );
           } else if (index == 0) {
-            // Navigate to Home Page when the home icon is clicked
-            Navigator.pop(context); // Go back to the home screen
-          }
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => home()),
+            );
+          } 
         },
       ),
     );

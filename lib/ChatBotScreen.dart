@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
 import 'setting.dart'; // Import the setting screen
-import 'wishlist.dart'; // Import the wishlist screen
 import 'InstructionPage.dart'; // Import the instruction page
 import 'OrderHistoryPage.dart'; // Import the order history page
 import 'home.dart'; // Import the home screen
@@ -34,18 +34,19 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        automaticallyImplyLeading: false,
+        title: Text(
+          "AI Chat",
+          style: TextStyle(
+            color: AppStyles.textLight,
+            fontFamily: 'Inter',
+            fontSize: 36,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        title: const Text(
-          "Ai Chat",
-          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        backgroundColor: AppStyles.primarybackground,
       ),
       body: Column(
         children: [
@@ -63,7 +64,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.orange.shade300,
+                          color: AppStyles.fadedColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Text(
@@ -81,7 +82,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isUserMessage ? Colors.orange.shade300 : Colors.grey.shade200,
+                      color: isUserMessage ? AppStyles.fadedColor: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -134,7 +135,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.orange),
+                  icon: const Icon(Icons.send, color: AppStyles.buttonColor),
                   onPressed: () {
                     setState(() {
                       isTyping = true;
@@ -154,6 +155,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       ),
       // Add the bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppStyles.backgroundColor,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -181,30 +183,35 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           // Handle tap events for bottom navigation icons
           if (index == 4) {
             // Navigate to Settings screen when the Settings icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const setting()),
             );
           } else if (index == 2) {
             // Navigate to Instruction Page when the controller icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => InstructionPage()),
             );
           } else if (index == 3) {
             // Navigate to Order History Page when the history icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => OrderHistoryPage()),
             );
           } else if (index == 1) {
             // Navigate to Cart Page when the cart icon is clicked
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => cart()),
             );
           } else if (index == 0) {
             // Navigate to Home Page when the home icon is clicked
+            Navigator.pop(context);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const home()),
@@ -212,19 +219,19 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to the chatbot page when the button is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatbotScreen()), // Replace with actual chat bot page
-          );
-        },
-        backgroundColor: Colors.teal.shade700, // Color for the chat icon
-        child: const Icon(Icons.chat, color: Colors.white), // Chat icon
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .endFloat, // Position the button in the bottom right corner
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Navigate to the chatbot page when the button is pressed
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => ChatbotScreen()), // Replace with actual chat bot page
+      //     );
+      //   },
+      //   backgroundColor: Colors.teal.shade700, // Color for the chat icon
+      //   child: const Icon(Icons.chat, color: Colors.white), // Chat icon
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation
+      //     .endFloat, // Position the button in the bottom right corner
     );
   }
 }

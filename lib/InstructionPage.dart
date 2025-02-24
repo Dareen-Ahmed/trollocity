@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'ControllerPage.dart';
-import 'ControllerPage.dart'; // Import the ControllerPage
+import 'ControllerPage.dart';
+import 'app_styles.dart'; // Import the ControllerPage
 
 class InstructionPage extends StatefulWidget {
   @override
@@ -23,16 +24,21 @@ class _InstructionPageState extends State<InstructionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppStyles.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.orange),
+          icon: Icon(Icons.arrow_back, color: AppStyles.buttonColor),
           onPressed: () {
             Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ControllerPage()),
+            );
           },
         ),
-        title: Text("Instruction", style: TextStyle(color: Colors.orange)),
+        title: Text("Instruction", style: TextStyle(color: AppStyles.buttonColor)),
       ),
       body: Column(
         children: [
@@ -88,7 +94,7 @@ class _InstructionPageState extends State<InstructionPage> {
                 height: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _currentPage == index ? Colors.orange : Colors.grey,
+                  color: _currentPage == index ? AppStyles.buttonColor : Colors.grey,
                 ),
               );
             }),
@@ -121,7 +127,7 @@ class InstructionStep extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(stepTitle, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.orange)),
+          Text(stepTitle, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppStyles.buttonColor)),
           SizedBox(height: 20),
           Image.network(imagePath, width: 150, height: 150, errorBuilder: (context, error, stackTrace) {
             return Icon(Icons.broken_image, size: 150, color: Colors.grey); // Fallback if image fails to load
@@ -131,7 +137,7 @@ class InstructionStep extends StatelessWidget {
           SizedBox(height: 30),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
+              backgroundColor: AppStyles.buttonColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
             ),

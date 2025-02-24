@@ -28,7 +28,7 @@ class PersonalCarePage extends StatelessWidget {
           style: IconButton.styleFrom(
               backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
         ),
-        backgroundColor: Color(0xFF317A8B),
+        backgroundColor: AppStyles.primarybackground,
         automaticallyImplyLeading: false,
       ),
       body: Padding(
@@ -67,6 +67,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(

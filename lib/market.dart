@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_styles.dart';
 import 'home.dart'; // Import the home screen
 
 class market extends StatelessWidget {
@@ -30,8 +31,9 @@ class market extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
+        backgroundColor:AppStyles.primarybackground,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),

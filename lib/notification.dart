@@ -232,15 +232,17 @@
 
 import 'package:flutter/material.dart';
 
+import 'app_styles.dart';
+
 class notification extends StatelessWidget {
   const notification({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB), // لون خلفية قريب من التصميم
+      backgroundColor: AppStyles.backgroundColor, // لون خلفية قريب من التصميم
       appBar: AppBar(
-        backgroundColor: Color(0xFF317A8B), // App bar color
+        backgroundColor: AppStyles.primarybackground, // App bar color
         elevation: 0,
         titleSpacing: 16,
         title: const Text(
