@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // لاستيراد الـ inputFormatters
+import 'package:graduation/app_styles.dart';
 import 'change_password.dart';
 import 'market.dart'; // Import the MarketChooserScreen
 
@@ -28,8 +29,9 @@ class _OtpScreenState extends State<otp_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
+        backgroundColor: AppStyles.primarybackground,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -44,9 +46,9 @@ class _OtpScreenState extends State<otp_screen> {
             const Text(
               "Verification Code",
               style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                color: AppStyles.titleText,
               ),
             ),
             const SizedBox(height: 10),
@@ -65,7 +67,7 @@ class _OtpScreenState extends State<otp_screen> {
                   height: 40,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: AppStyles.textGrey),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
@@ -102,21 +104,26 @@ class _OtpScreenState extends State<otp_screen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const market(),
+                    builder: (context) => const change_password(),
                   ),
                 );
               }
                   : null, // تعطيل الزر إذا لم يتم إدخال جميع الأرقام
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
+                backgroundColor: AppStyles.buttonColor,
                 padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                fixedSize: Size(270, 60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
               child: const Text(
-                "Let's Get Started",
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                "Change Password",
+                style:TextStyle(
+                      color: AppStyles.textLight,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ),
           ],

@@ -115,29 +115,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildPaymentMethod(
-                    imageUrl:
-                    'https://www.iconpacks.net/icons/free-icons-6/free-visa-circle-round-logo-icon-19751-thumb.png',
+                    imageUrl: 'assets/PayMethod/visa-logo.png',
                     title: 'Visa',
                     value: 'Visa',
                   ),
                   SizedBox(height: 20),
                   _buildPaymentMethod(
-                    imageUrl:
-                    'https://play-lh.googleusercontent.com/Pv1p8v-KJq4Z_LLOjQjBZpK8DNJg4Zb5aNOQY7WfoiHR4Gfs165Z1TTNMThZ883Yfg',
+                    imageUrl: 'assets/PayMethod/instapay.jpg',
                     title: 'InstaPay',
                     value: 'InstaPay',
                   ),
                   SizedBox(height: 20),
                   _buildPaymentMethod(
-                    imageUrl:
-                    'https://arwaalaasam.com/wp-content/uploads/2023/02/vodafon.png',
+                    imageUrl: 'assets/PayMethod/vodafone.jpg',
                     title: 'Vodafone cash',
                     value: 'Vodafone cash',
                   ),
                   SizedBox(height: 20),
                   _buildPaymentMethod(
-                    imageUrl:
-                    'https://cdn-icons-png.flaticon.com/512/5968/5968601.png',
+                    imageUrl: 'assets/PayMethod/applepay.jpg',
                     title: 'Apple Pay',
                     value: 'Apple Pay',
                   ),
@@ -197,11 +193,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: Image.asset(
               imageUrl,
               width: 50,
               height: 50,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
           SizedBox(width: 10),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
+import 'package:graduation/navBar.dart';
 import 'setting.dart';
 import 'wishlist.dart';
 import 'ChatBotScreen.dart';
@@ -46,62 +47,9 @@ class home extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppStyles.backgroundColor,
-        selectedItemColor: AppStyles.primarybackground, 
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.trolley),
-            label: 'Controller',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Order History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        onTap: (index) {
-          // Handle tap events for bottom navigation icons
-          if (index == 4) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const setting()),
-            );
-          } else if (index == 2) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => InstructionPage()),
-            );
-          } else if (index == 3) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-            );
-          } else if (index == 1) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => cart()),
-            );
-          }
-        },
-      ),
+      
+      bottomNavigationBar: const ButtomNavbar(currentIndex: 0),
+
       
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ControllerPage.dart';
 import 'ControllerPage.dart';
-import 'app_styles.dart'; // Import the ControllerPage
+import 'app_styles.dart';
+import 'navBar.dart'; // Import the ControllerPage
 
 class InstructionPage extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _InstructionPageState extends State<InstructionPage> {
                 // Step One
                 InstructionStep(
                   stepTitle: "Step One",
-                  imagePath: "https://th.bing.com/th/id/OIP.9mMXwwLmNU-LvmYdjL2BxwHaHa?w=512&h=512&rs=1&pid=ImgDetMain",
+                  imagePath: "assets/stepone.jpg",
                   description: "Make sure that your Bluetooth is on to connect with the car.",
                   onNext: _goToNextStep,
                 ),
@@ -62,7 +63,7 @@ class _InstructionPageState extends State<InstructionPage> {
                 // Step Two
                 InstructionStep(
                   stepTitle: "Step Two",
-                  imagePath: "https://specopssoft.com/wp-content/uploads/2023/10/password-reset-illustration.jpg",
+                  imagePath: "assets/steptwo.jpg",
                   description: "Connect your device to the car's system and confirm pairing.",
                   onNext: _goToNextStep,
                 ),
@@ -70,7 +71,7 @@ class _InstructionPageState extends State<InstructionPage> {
                 // Step Three
                 InstructionStep(
                   stepTitle: "Step Three",
-                  imagePath: "https://cdn-icons-png.flaticon.com/512/845/845646.png",
+                  imagePath: "assets/stepthree.png",
                   description: "The connection is done successfully.",
                   onNext: () {
                     // Navigate to ControllerPage when clicking "Start Now"
@@ -103,6 +104,8 @@ class _InstructionPageState extends State<InstructionPage> {
           SizedBox(height: 20),
         ],
       ),
+      // bottomNavigationBar: const ButtomNavbar(currentIndex: 2),
+
     );
   }
 }
@@ -129,7 +132,7 @@ class InstructionStep extends StatelessWidget {
         children: [
           Text(stepTitle, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppStyles.buttonColor)),
           SizedBox(height: 20),
-          Image.network(imagePath, width: 150, height: 150, errorBuilder: (context, error, stackTrace) {
+          Image.asset(imagePath, width: 150, height: 150, errorBuilder: (context, error, stackTrace) {
             return Icon(Icons.broken_image, size: 150, color: Colors.grey); // Fallback if image fails to load
           }),
           SizedBox(height: 20),

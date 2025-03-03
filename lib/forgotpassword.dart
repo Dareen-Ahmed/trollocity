@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart'; // مكتبة للتحقق من صحة البريد الإلكتروني
+import 'package:graduation/app_styles.dart';
 import 'otp_screen.dart';
 
 class forgotpassword extends StatefulWidget {
@@ -16,7 +17,8 @@ class _ForgotPasswordState extends State<forgotpassword> {
   void _sendCode() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("A reset link has been sent to your email!")),
+        const SnackBar(
+            content: Text("A reset link has been sent to your email!")),
       );
 
       // الانتقال إلى صفحة OTP مع تمرير البريد الإلكتروني
@@ -32,9 +34,9 @@ class _ForgotPasswordState extends State<forgotpassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
+        backgroundColor: AppStyles.primarybackground,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -51,15 +53,15 @@ class _ForgotPasswordState extends State<forgotpassword> {
               const Text(
                 "Forgot Password",
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.orange,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  color: AppStyles.titleText,
                 ),
               ),
               const SizedBox(height: 10),
               const Text(
-                "Enter your email below and we'll send you a link to reset your password.",
-                style: TextStyle(color: Colors.grey),
+                "We will send you an email with a link to reset your password, please enter the email associated with your account below.",
+                style: TextStyle(color: AppStyles.textGrey),
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -70,7 +72,8 @@ class _ForgotPasswordState extends State<forgotpassword> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -86,10 +89,21 @@ class _ForgotPasswordState extends State<forgotpassword> {
                 child: ElevatedButton(
                   onPressed: _sendCode,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: AppStyles.buttonColor,
+                    // minimumSize: const Size(double.infinity, 50),
+                    fixedSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                  child: const Text("Send Code"),
+                  child: const Text(
+                    "Send Code",
+                    style: TextStyle(
+                      color: AppStyles.textLight,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],

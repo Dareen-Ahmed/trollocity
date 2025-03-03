@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:graduation/app_styles.dart';
+import 'package:graduation/market.dart';
 import 'home.dart'; // Import the home screen
 
 class change_password extends StatefulWidget {
@@ -39,8 +41,9 @@ class _ChangePasswordScreenState extends State<change_password> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
+        backgroundColor: AppStyles.primarybackground,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -55,9 +58,9 @@ class _ChangePasswordScreenState extends State<change_password> {
             const Text(
               "Change Password",
               style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                color: AppStyles.titleText,
               ),
             ),
             const SizedBox(height: 8),
@@ -93,7 +96,7 @@ class _ChangePasswordScreenState extends State<change_password> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const home(),
+                          builder: (context) => const market(),
                         ),
                       );
                     } else {
@@ -116,7 +119,7 @@ class _ChangePasswordScreenState extends State<change_password> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
+                    backgroundColor: AppStyles.buttonColor,
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
