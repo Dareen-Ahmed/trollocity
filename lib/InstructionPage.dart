@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ControllerPage.dart';
-import 'ControllerPage.dart';
 import 'app_styles.dart';
-import 'navBar.dart'; // Import the ControllerPage
 
 class InstructionPage extends StatefulWidget {
   @override
@@ -39,7 +37,8 @@ class _InstructionPageState extends State<InstructionPage> {
             );
           },
         ),
-        title: Text("Instruction", style: TextStyle(color: AppStyles.buttonColor)),
+        title:
+            Text("Instruction", style: TextStyle(color: AppStyles.buttonColor)),
       ),
       body: Column(
         children: [
@@ -56,7 +55,8 @@ class _InstructionPageState extends State<InstructionPage> {
                 InstructionStep(
                   stepTitle: "Step One",
                   imagePath: "assets/stepone.jpg",
-                  description: "Make sure that your Bluetooth is on to connect with the car.",
+                  description:
+                      "Make sure that your Bluetooth is on to connect with the car.",
                   onNext: _goToNextStep,
                 ),
 
@@ -64,7 +64,8 @@ class _InstructionPageState extends State<InstructionPage> {
                 InstructionStep(
                   stepTitle: "Step Two",
                   imagePath: "assets/steptwo.jpg",
-                  description: "Connect your device to the car's system and confirm pairing.",
+                  description:
+                      "Connect your device to the car's system and confirm pairing.",
                   onNext: _goToNextStep,
                 ),
 
@@ -95,7 +96,9 @@ class _InstructionPageState extends State<InstructionPage> {
                 height: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _currentPage == index ? AppStyles.buttonColor : Colors.grey,
+                  color: _currentPage == index
+                      ? AppStyles.buttonColor
+                      : Colors.grey,
                 ),
               );
             }),
@@ -105,7 +108,6 @@ class _InstructionPageState extends State<InstructionPage> {
         ],
       ),
       // bottomNavigationBar: const ButtomNavbar(currentIndex: 2),
-
     );
   }
 }
@@ -130,23 +132,32 @@ class InstructionStep extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(stepTitle, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppStyles.buttonColor)),
+          Text(stepTitle,
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyles.buttonColor)),
           SizedBox(height: 20),
-          Image.asset(imagePath, width: 150, height: 150, errorBuilder: (context, error, stackTrace) {
-            return Icon(Icons.broken_image, size: 150, color: Colors.grey); // Fallback if image fails to load
+          Image.asset(imagePath, width: 150, height: 150,
+              errorBuilder: (context, error, stackTrace) {
+            return Icon(Icons.broken_image,
+                size: 150,
+                color: Colors.grey); // Fallback if image fails to load
           }),
           SizedBox(height: 20),
-          Text(description, textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.black54)),
+          Text(description,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.black54)),
           SizedBox(height: 30),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppStyles.buttonColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-            ),
-            onPressed: onNext,
-            child: Text("Start Now", style: TextStyle(color: Colors.white, fontSize: 16)),
-          ),
+          // ElevatedButton(
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: AppStyles.buttonColor,
+          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+          //   ),
+          //   onPressed: onNext,
+          //   child: Text("Start Now", style: TextStyle(color: Colors.white, fontSize: 16)),
+          // ),
         ],
       ),
     );

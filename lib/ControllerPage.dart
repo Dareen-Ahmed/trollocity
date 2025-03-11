@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/InstructionPage.dart';
 import 'package:graduation/app_styles.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_blue_classic/flutter_blue_classic.dart';
+import 'dart:async';
 import 'dart:typed_data';
 import 'navBar.dart';
 
@@ -12,11 +13,52 @@ class ControllerPage extends StatefulWidget {
 
 class _ControllerPageState extends State<ControllerPage> {
   int _currentIndex = 2;
-  BluetoothDevice? selectedDevice;
-  BluetoothConnection? connection;
-  bool isConnected = false; // Default selected index for the Controller screen
+  BluetoothDevice? _selectedDevice;
+  bool _isConnected = false;
+  BluetoothConnection? _connection;
+  List<BluetoothDevice> _bondedDevices = [];
+  final _flutterBlue = FlutterBlueClassic();
+  StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
+    VoidCallback? _onDisconnectedCallback;
+  StreamSubscription<bool>? _connectionSubscription;
 
-  // دالة اختيار الجهاز والاتصال به
+  @override
+  void initState() {
+    super.initState();
+    _initBluetooth();
+  }
+
+  @override
+  void dispose() {
+    _adapterStateSubscription?.cancel();
+    _connection?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _initBluetooth() async {
+    try {
+      // Get updated bonded devices list
+      await _refreshDevices();
+
+      // Listen for Bluetooth state changes
+      _adapterStateSubscription = _flutterBlue.adapterState.listen((state) {
+        if (state == BluetoothAdapterState.on) {
+          _refreshDevices();
+        }
+      });
+    } catch (e) {
+      print("Bluetooth error: $e");
+    }
+  }
+
+  Future<void> _refreshDevices() async {
+    final devices = await _flutterBlue.bondedDevices;
+    setState(() {
+      _bondedDevices = devices ?? []; // Handle null case
+    });
+  }
+
+
   Future<bool> selectDevice() async {
     bool deviceSelected = false;
 
@@ -24,21 +66,31 @@ class _ControllerPageState extends State<ControllerPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Select the bluetooth device"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: devices.map((device) {
-                return ListTile(
-                  title: Text(device.name ?? "unKnown"),
-                  subtitle: Text(device.address),
-                  onTap: () {
-                    Navigator.pop(context);
-                    connectToDevice(device);
-                    deviceSelected = true;
-                  },
-                );
-              }).toList(),
-            ),
+          title: Text("Select HC-05"),
+          content: Column(
+            children: [
+              ElevatedButton(
+                onPressed: _refreshDevices,
+                child: Text("Refresh Devices"),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: _bondedDevices.map((device) {
+                      return ListTile(
+                        title: Text(device.name ?? "Unknown"),
+                        subtitle: Text(device.address),
+                        onTap: () async {
+                          Navigator.pop(context);
+                          await _connectToDevice(device);
+                          deviceSelected = true;
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -47,40 +99,70 @@ class _ControllerPageState extends State<ControllerPage> {
     return deviceSelected;
   }
 
-  // دالة الاتصال بالجهاز
-  void connectToDevice(BluetoothDevice device) async {
+
+Future<void> _connectToDevice(BluetoothDevice device) async {
     try {
-      BluetoothConnection connectionInstance =
-          await BluetoothConnection.toAddress(device.address);
+      _connection = await _flutterBlue.connect(device.address);
+      if (_connection == null) {
+        throw Exception("Failed to establish connection.");
+      }
+
+      // Ensure _connection.input is not null before listening
+      if (_connection!.input != null) {
+        _connection!.input!.listen(_handleIncomingData);
+      } else {
+        print("Warning: _connection.input is null. No data received.");
+      }
+
+      // Instead of connectionState, check isConnected directly
       setState(() {
-        selectedDevice = device;
-        connection = connectionInstance;
-        isConnected = true;
+        _selectedDevice = device;
+        _isConnected = _connection!.isConnected;
       });
+
       print("Connected to ${device.name}");
     } catch (e) {
       print("Connection failed: $e");
+      _cleanupConnection();
     }
   }
 
-  // دالة قطع الاتصال
-  void disconnect() {
-    connection?.close();
+
+
+  void _handleIncomingData(Uint8List data) {
+    print("Received: ${String.fromCharCodes(data)}");
+  }
+
+  void _cleanupConnection() {
     setState(() {
-      isConnected = false;
-      selectedDevice = null;
+      _isConnected = false;
+      _selectedDevice = null;
+      _connection = null;
     });
-    print("Disconnected");
+  }
+
+void disconnect() async {
+    if (_connection != null) {
+      _connection!.dispose();
+      _cleanupConnection();
+      print("Disconnected");
+    }
   }
 
   void sendCommand(String command) {
-    if (isConnected && connection != null) {
-      connection!.output.add(Uint8List.fromList(command.codeUnits));
-      connection!.output.allSent.then((_) => print("Sent: $command"));
+    if (_isConnected && _connection != null && _connection!.isConnected) {
+      try {
+        _connection!.output.add(Uint8List.fromList(command.codeUnits));
+        _connection!.output.allSent.then((_) => print("Sent: $command"));
+      } catch (e) {
+        print("Error sending command: $e");
+        _cleanupConnection();
+      }
     } else {
-      print("Not connected to any device");
+      print("Device not connected. Command not sent.");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +222,7 @@ class _ControllerPageState extends State<ControllerPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                 child: Container(
                   width: 300,
@@ -164,22 +247,20 @@ class _ControllerPageState extends State<ControllerPage> {
                         fontFamily: 'Inter',
                         fontSize: 16,
                         letterSpacing: 0.0,
-                        color: Colors.black, // Add appropriate color
+                        color: Colors.black,
                       ),
                     ),
                     Expanded(
                       child: Align(
                         alignment: AlignmentDirectional(1, -1),
                         child: Switch(
-                          value: isConnected,
+                          value: _isConnected,
                           activeColor: Colors.orange,
                           onChanged: (bool value) async {
                             if (value) {
                               bool deviceSelected = await selectDevice();
                               if (!deviceSelected) {
-                                setState(() {
-                                  isConnected = false;
-                                });
+                                setState(() => _isConnected = false);
                               }
                             } else {
                               disconnect();
@@ -191,10 +272,10 @@ class _ControllerPageState extends State<ControllerPage> {
                   ],
                 ),
               ),
-              if (selectedDevice != null)
+              if (_selectedDevice != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Connected to: ${selectedDevice!.name}"),
+                  child: Text("Connected to: ${_selectedDevice!.name}"),
                 ),
               SizedBox(height: 20),
               Column(

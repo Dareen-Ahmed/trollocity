@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
-import 'create_account_screen.dart'; // Import the AuthScreen
+import 'create_account_screen.dart';
 import 'forgotpassword.dart';
 import 'otp_screen.dart';
 import 'change_password.dart';
-import 'home.dart'; // Import HomeScreen
-import 'market.dart'; // Import the MarketChooserScreen
+import 'home.dart'; 
+import 'market.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
         '/forgotPassword': (context) => const forgotpassword(),
         '/otp': (context) => const otp_screen(email: ''),
         '/changePassword': (context) => const change_password(),
-        '/home': (context) => const home(), // Add HomeScreen to routes
-        '/markets': (context) => const market(), // Add MarketChooserScreen to routes
+        '/home': (context) => const home(), 
+        '/markets': (context) => const market(),
       },
     );
   }

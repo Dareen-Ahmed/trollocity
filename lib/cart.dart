@@ -1,13 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:graduation/InstructionPage.dart';
 import 'package:graduation/app_styles.dart';
-import 'package:graduation/home.dart';
-import 'ControllerPage.dart';
-import 'PaymentMethods.dart'; // Import PaymentMethods page
+import 'PaymentMethods.dart'; 
 import 'navBar.dart';
-import 'setting.dart'; // Import other pages as needed
-import 'OrderHistoryPage.dart';
+
 
 class cart extends StatefulWidget {
   @override

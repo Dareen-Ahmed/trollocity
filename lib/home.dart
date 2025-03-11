@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'package:graduation/navBar.dart';
-import 'setting.dart';
 import 'wishlist.dart';
 import 'ChatBotScreen.dart';
-import 'InstructionPage.dart';
 import 'Mango.dart';
-import 'OrderHistoryPage.dart';
 import 'PersonalCarePage.dart';
 import 'SpecialOffersPage.dart';
 import 'Strawberry.dart';
-import 'cart.dart';
 import 'notification.dart';
 
 class home extends StatelessWidget {
