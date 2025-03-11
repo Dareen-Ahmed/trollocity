@@ -18,8 +18,6 @@ class _ControllerPageState extends State<ControllerPage> {
 
   // دالة اختيار الجهاز والاتصال به
   Future<bool> selectDevice() async {
-    List<BluetoothDevice> devices =
-        await FlutterBluetoothSerial.instance.getBondedDevices();
     bool deviceSelected = false;
 
     await showDialog(
@@ -75,7 +73,6 @@ class _ControllerPageState extends State<ControllerPage> {
     print("Disconnected");
   }
 
-  // إرسال الأوامر للعربة عبر البلوتوث
   void sendCommand(String command) {
     if (isConnected && connection != null) {
       connection!.output.add(Uint8List.fromList(command.codeUnits));
@@ -143,8 +140,6 @@ class _ControllerPageState extends State<ControllerPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Updated Image
-              Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                 child: Container(
                   width: 300,
@@ -157,7 +152,6 @@ class _ControllerPageState extends State<ControllerPage> {
                   ),
                 ),
               ),
-
               SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.all(10),
@@ -192,17 +186,6 @@ class _ControllerPageState extends State<ControllerPage> {
                             }
                           },
                         ),
-                        //   Switch.adaptive(value: value, onChanged: onChanged),
-                        // child: Switch.adaptive(
-                        //   value: _model.switchValue!,
-                        //   onChanged: (newValue) async {
-                        //     safeSetState(() => _model.switchValue = newValue!);
-                        //   },
-                        //   activeColor: Color(0xFFDE5902),
-                        //   activeTrackColor: Color(0xFFDE5902),
-                        //   inactiveTrackColor: Colors.grey.shade300,
-                        //   inactiveThumbColor: Colors.white,
-                        // ),
                       ),
                     ),
                   ],
@@ -213,9 +196,7 @@ class _ControllerPageState extends State<ControllerPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text("Connected to: ${selectedDevice!.name}"),
                 ),
-
               SizedBox(height: 20),
-
               Column(
                 children: [
                   _arrowButton(Icons.arrow_upward, () => sendCommand("F")),
@@ -240,46 +221,6 @@ class _ControllerPageState extends State<ControllerPage> {
             ],
           ),
         ),
-        // // Arrow Buttons Layout (Cross Shape)
-        // Column(
-        //   children: [
-        //     // Up Arrow
-        //     _arrowButton(Icons.arrow_upward, () {
-        //       print("Up pressed");
-        //     }
-        //     ),
-
-        //     Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         // Left Arrow
-        //         _arrowButton(Icons.arrow_back, () {
-        //           print("Left pressed");
-        //         }),
-
-        //         // Green Center Button (No action needed)
-        //         Container(
-        //           width: 60,
-        //           height: 60,
-        //           decoration: BoxDecoration(
-        //             color: Colors.green,
-        //             shape: BoxShape.circle,
-        //           ),
-        //         ),
-
-        //         // Right Arrow
-        //         _arrowButton(Icons.arrow_forward, () {
-        //           print("Right pressed");
-        //         }),
-        //       ],
-        //     ),
-
-        //     // Down Arrow
-        //     _arrowButton(Icons.arrow_downward, () {
-        //       print("Down pressed");
-        //     }),
-        //   ],
-        // ),
       ),
       bottomNavigationBar: const ButtomNavbar(currentIndex: 2),
     );
