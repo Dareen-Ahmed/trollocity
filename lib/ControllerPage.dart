@@ -278,25 +278,63 @@ void disconnect() async {
                   child: Text("Connected to: ${_selectedDevice!.name}"),
                 ),
               SizedBox(height: 20),
+              // Column(
+              //   children: [
+              //     _arrowButton(Icons.arrow_upward, () => sendCommand("F")),
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         _arrowButton(Icons.arrow_back, () => sendCommand("L")),
+              //         Container(
+              //           width: 60,
+              //           height: 60,
+              //           decoration: BoxDecoration(
+              //             color: Colors.red,
+              //             shape: BoxShape.circle,
+              //           ),
+              //         ),
+              //         _arrowButton(Icons.arrow_forward, () => sendCommand("R")),
+              //       ],
+              //     ),
+              //     _arrowButton(Icons.arrow_downward, () => sendCommand("B")),
+              //   ],
+              // ),
+
               Column(
                 children: [
-                  _arrowButton(Icons.arrow_upward, () => sendCommand("F")),
+                  _arrowButton(
+                    Icons.arrow_upward,
+                    onPressed: () => sendCommand("F"),
+                    onReleased: () => sendCommand("S"),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _arrowButton(Icons.arrow_back, () => sendCommand("L")),
+                      _arrowButton(
+                        Icons.arrow_back,
+                        onPressed: () => sendCommand("L"),
+                        onReleased: () => sendCommand("S"),
+                      ),
                       Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: _isConnected ? const Color.fromARGB(255, 0, 167, 6) : Color.fromARGB(255, 206, 14, 0),
                           shape: BoxShape.circle,
                         ),
                       ),
-                      _arrowButton(Icons.arrow_forward, () => sendCommand("R")),
+                      _arrowButton(
+                        Icons.arrow_forward,
+                        onPressed: () => sendCommand("R"),
+                        onReleased: () => sendCommand("S"),
+                      ),
                     ],
                   ),
-                  _arrowButton(Icons.arrow_downward, () => sendCommand("B")),
+                  _arrowButton(
+                    Icons.arrow_downward,
+                    onPressed: () => sendCommand("B"),
+                    onReleased: () => sendCommand("S"),
+                  ),
                 ],
               ),
             ],
@@ -307,19 +345,40 @@ void disconnect() async {
     );
   }
 
-  // Arrow Button Widget
-  Widget _arrowButton(IconData icon, VoidCallback onPressed) {
+  // // Arrow Button Widget
+  // Widget _arrowButton(IconData icon, VoidCallback onPressed) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(5.0),
+  //     child: ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //         backgroundColor: AppStyles.buttonColor,
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  //         padding: EdgeInsets.all(15),
+  //         minimumSize: Size(60, 60),
+  //       ),
+  //       onPressed: onPressed,
+  //       child: Icon(icon, color: Colors.white, size: 30),
+  //     ),
+  //   );
+  // }
+
+  Widget _arrowButton(IconData icon,
+      {required VoidCallback onPressed, required VoidCallback onReleased}) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppStyles.buttonColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: EdgeInsets.all(15),
-          minimumSize: Size(60, 60),
+      child: GestureDetector(
+        onTapDown: (_) => onPressed(),
+        onTapUp: (_) => onReleased(),
+        onTapCancel: () => onReleased(),
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            color: AppStyles.buttonColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: Colors.white, size: 30),
         ),
-        onPressed: onPressed,
-        child: Icon(icon, color: Colors.white, size: 30),
       ),
     );
   }
