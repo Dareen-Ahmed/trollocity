@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'forgotpassword.dart'; // تأكد من وجود هذه الصفحة
+import 'market.dart'; // Import the MarketChooserScreen
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -207,10 +209,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     width: 350,
                     fit: BoxFit.cover,
                   ),
-
                   const SizedBox(height: 20),
-
-                  // ---- Tab Switcher Row ----
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -219,8 +218,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-
-                  // ---- Title & Subtitle ----
                   Text(
                     isLogin ? "Welcome Back" : "Create Account",
                     style: const TextStyle(
@@ -237,39 +234,12 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 20),
-
-                  // ---- Name Field (only if creating account) ----
                   if (!isLogin)
-                    _buildTextField(
-                      nameController,
-                      "First & Last Name",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "This field cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-
-                  // ---- Email Field ----
-                  _buildTextField(
-                    emailController,
-                    "Email",
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "This field cannot be empty.";
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return "Enter a valid email address.";
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // ---- Password Field ----
-                  _buildPasswordField(),
-
-                  // ---- Forgot Password Link (only if Login) ----
+                    _buildTextField(nameController, "First & Last Name",
+                        isName: true),
+                  _buildTextField(emailController, "Email", isPassword: false),
+                  _buildTextField(passwordController, "Password",
+                      isPassword: true),
                   if (isLogin)
                     Align(
                       alignment: Alignment.centerRight,
@@ -278,7 +248,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ForgotPassword(),
+                              builder: (context) => const forgotpassword(),
                             ),
                           );
                         },
@@ -295,7 +265,6 @@ class _AuthScreenState extends State<AuthScreen> {
                   const SizedBox(height: 10),
 
                   // ---- Sign In / Verify Button ----
-                  ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         if (isLogin) {
@@ -304,33 +273,6 @@ class _AuthScreenState extends State<AuthScreen> {
                           _registerUser();
                         }
                       }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFde5902),
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    child: Text(isLogin ? "Sign In" : "Verify Account"),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // ---- "Or sign in with" ----
-                  const Text(
-                      "Or sign in with", style: TextStyle(color: Colors.grey)),
-                  const SizedBox(height: 10),
-
-                  // ---- Google Sign-In Button ----
-                  GestureDetector(
-                    onTap: () {
-                      signInWithGoogle();
-                    },
-                    child: _buildSocialButton(
-                      "Continue with Google",
-                      "assets/googleicon.jpg", // Pass asset path instead of a URL
-                    ),
-                  ),
-
-
                 ],
               ),
             ),
@@ -413,9 +355,6 @@ class _AuthScreenState extends State<AuthScreen> {
               height: 3,
               width: loginTab ? 50 : 80,
               color: const Color(0xFFde5902),
-            ),
-        ],
-      ),
     );
   }
 
@@ -425,12 +364,12 @@ class _AuthScreenState extends State<AuthScreen> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildTextField(TextEditingController controller, String hint,
+      {bool isPassword = false, bool isName = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: TextFormField(
+        controller: controller,
         children: [
           Image.asset(assetPath, height: 24),
           // Use Image.asset instead of Image.network

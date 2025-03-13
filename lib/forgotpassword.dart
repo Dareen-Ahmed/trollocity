@@ -41,7 +41,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Future<void> _sendResetEmail(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("A reset link has been sent to your email!"),
         ),
@@ -60,15 +59,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       await _sendResetEmail(emailController.text);
       // In a real scenario, the user should check their email and follow the link.
       // You might add instructions on the UI explaining that.
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF317A8B),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -92,8 +82,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
               const SizedBox(height: 10),
               const Text(
-                "Enter your email below and we'll send you a link to reset your password.",
-                style: TextStyle(color: Colors.grey),
+                "We will send you an email with a link to reset your password, please enter the email associated with your account below.",
+                style: TextStyle(color: AppStyles.textGrey),
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -104,7 +94,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -120,10 +111,21 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 child: ElevatedButton(
                   onPressed: _sendCode,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: AppStyles.buttonColor,
+                    // minimumSize: const Size(double.infinity, 50),
+                    fixedSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                  child: const Text("Send Code"),
+                  child: const Text(
+                    "Send Code",
+                    style: TextStyle(
+                      color: AppStyles.textLight,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],

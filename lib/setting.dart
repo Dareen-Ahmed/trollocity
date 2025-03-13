@@ -134,59 +134,204 @@ class _SettingScreenState extends State<SettingScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                                child: Text(
-                                  'Settings',
-                                  style: TextStyle(
-                                    fontFamily: 'Inter Tight',
-                                    fontSize: 30,
-                                  ),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                child: Text('Settings',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter Tight',
+                                      fontSize: 30,
+                                    )),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.language_rounded,
+                                        color: AppStyles.textDark,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text('Language',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontFamily: 'Inter Tight',
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                    Text('English (eng)',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppStyles.primarybackground,
+                                          fontSize: 16,
+                                        )),
+                                  ],
                                 ),
                               ),
-                              SettingsItem(
-                                icon: Icons.language_rounded,
-                                title: 'Language',
-                                trailingText: 'English (eng)',
-                                onTap: () {
-                                  // Handle language settings
-                                },
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.lock_open,
+                                        color: AppStyles.textDark,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text('Privacy & Policy ',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              color: AppStyles.textDark,
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              SettingsItem(
-                                icon: Icons.lock_open,
-                                title: 'Privacy & Policy',
-                                onTap: () {
-                                  // Handle privacy & policy
-                                },
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.help_outline_rounded,
+                                        color: AppStyles.textDark,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text('Help',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              color: AppStyles.textDark,
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              SettingsItem(
-                                icon: Icons.help_outline_rounded,
-                                title: 'Help',
-                                onTap: () {
-                                  // Handle help
-                                },
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: AppStyles.textDark,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text('Profile Settings',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              color: AppStyles.textDark,
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                    Text('Edit Profile',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppStyles.primarybackground,
+                                          fontSize: 16,
+                                        )),
+                                  ],
+                                ),
                               ),
-                              SettingsItem(
-                                icon: Icons.edit,
-                                title: 'Profile Settings',
-                                trailingText: 'Edit Profile',
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => EditProfileScreen()),
-                                  );
-                                },
-                              ),
-                              SettingsItem(
-                                icon: Icons.login_rounded,
-                                title: 'Log out of account',
-                                trailingText: 'Log Out?',
-                                isLogout: true,
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => AuthScreen()),
-                                  );
-                                },
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.login_rounded,
+                                        color: AppStyles.textDark,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text('Log out of account',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              color: AppStyles.textDark,
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AuthScreen()), // Or CreateAccountScreen if different
+                                        );
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Text(
+                                          'Log Out?',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 221, 11, 11),
+                                            fontSize: 16,
+                                            decorationColor: Color.fromARGB(
+                                                255, 221, 11, 11),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -200,70 +345,74 @@ class _SettingScreenState extends State<SettingScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppStyles.backgroundColor,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        selectedItemColor: AppStyles.primarybackground,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.trolley),
-            label: 'Controller',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Order History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+      //  // Bottom Navigation Bar (Copied from the home screen)
+      //     bottomNavigationBar: BottomNavigationBar(
+      //     backgroundColor: AppStyles.backgroundColor,
+      //     type: BottomNavigationBarType.fixed,
+      //     currentIndex: _currentIndex, // Track the selected index
+      //     selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
+      //     unselectedItemColor: Colors.grey, // Unselected icons in grey
+      //     items: const [
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.home),
+      //         label: 'Home',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.shopping_cart),
+      //         label: 'Cart',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.trolley),
+      //         label: 'Controller',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.history),
+      //         label: 'Order History',
+      //       ),
+      //       BottomNavigationBarItem(
+      //         icon: Icon(Icons.settings),
+      //         label: 'Settings',
+      //       ),
+      //     ],
+      //     onTap: (index) {
+      //       setState(() {
+      //         _currentIndex = index; // Update the selected index
+      //       });
 
-          if (index == 0) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const home()),
-            );
-          } else if (index == 2) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => InstructionPage()),
-            );
-          } else if (index == 3) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-            );
-          } else if (index == 1) {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => cart()),
-            );
-          }
-        },
-      ),
+      //       // Handle tap events for bottom navigation icons
+      //       if (index == 0) {
+      //         Navigator.pop(context);
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => const home()),
+      //         );
+      //       } else if (index == 2) {
+      //         Navigator.pop(context);
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => InstructionPage()),
+      //         );
+      //       } else if (index == 3) {
+      //         Navigator.pop(context);
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => OrderHistoryPage()),
+      //         );
+      //       } else if (index == 1) {
+      //         Navigator.pop(context);
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => cart()),
+      //         );
+      //       }
+      //     },
+      //   ),
+      bottomNavigationBar: const ButtomNavbar(currentIndex: 4),
     );
   }
 }
 
+// Reusable Settings Item Widget
 class SettingsItem extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -287,13 +436,13 @@ class SettingsItem extends StatelessWidget {
       title: Text(title, style: const TextStyle(fontSize: 16)),
       trailing: trailingText != null
           ? Text(
-        trailingText!,
-        style: TextStyle(
-            color: isLogout ? Colors.red : AppStyles.primarybackground,
-            fontWeight: FontWeight.bold),
-      )
+              trailingText!,
+              style: TextStyle(
+                  color: isLogout ? Colors.red : AppStyles.primarybackground,
+                  fontWeight: FontWeight.bold),
+            )
           : null,
-      onTap: onTap,
+      onTap: onTap, // Use the provided onTap callback
     );
   }
 }

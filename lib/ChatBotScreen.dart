@@ -186,7 +186,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SettingScreen()),
+              MaterialPageRoute(builder: (context) => const setting()),
             );
           } else if (index == 2) {
             // Navigate to Instruction Page when the controller icon is clicked
