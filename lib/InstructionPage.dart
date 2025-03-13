@@ -70,10 +70,19 @@ class _InstructionPageState extends State<InstructionPage> {
                 ),
 
                 // Step Three
-                InstructionStep(
+               InstructionStep(
                   stepTitle: "Step Three",
-                  imagePath: "assets/stepthree.png",
+                  imagePath:
+                      "https://cdn-icons-png.flaticon.com/512/845/845646.png",
+                  description: "The connection is done successfully.",
+                  onNext: () {
+                    // Navigate to ControllerPage when clicking "Start Now"
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ControllerPage()),
+                    );
                   },
+                ),
               ],
             ),
           ),

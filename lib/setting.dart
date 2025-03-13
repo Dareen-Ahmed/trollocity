@@ -3,6 +3,7 @@ import 'package:graduation/app_styles.dart';
 import 'package:graduation/home.dart';
 import 'EditProfileScreen.dart';
 import 'create_account_screen.dart';
+import 'navBar.dart';
 import 'setting.dart';
 import 'wishlist.dart';
 import 'ChatBotScreen.dart';
@@ -345,68 +346,6 @@ class _SettingScreenState extends State<SettingScreen> {
           ],
         ),
       ),
-      //  // Bottom Navigation Bar (Copied from the home screen)
-      //     bottomNavigationBar: BottomNavigationBar(
-      //     backgroundColor: AppStyles.backgroundColor,
-      //     type: BottomNavigationBarType.fixed,
-      //     currentIndex: _currentIndex, // Track the selected index
-      //     selectedItemColor: AppStyles.primarybackground, // Highlight the selected icon in blue
-      //     unselectedItemColor: Colors.grey, // Unselected icons in grey
-      //     items: const [
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.home),
-      //         label: 'Home',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.shopping_cart),
-      //         label: 'Cart',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.trolley),
-      //         label: 'Controller',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.history),
-      //         label: 'Order History',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.settings),
-      //         label: 'Settings',
-      //       ),
-      //     ],
-      //     onTap: (index) {
-      //       setState(() {
-      //         _currentIndex = index; // Update the selected index
-      //       });
-
-      //       // Handle tap events for bottom navigation icons
-      //       if (index == 0) {
-      //         Navigator.pop(context);
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => const home()),
-      //         );
-      //       } else if (index == 2) {
-      //         Navigator.pop(context);
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => InstructionPage()),
-      //         );
-      //       } else if (index == 3) {
-      //         Navigator.pop(context);
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-      //         );
-      //       } else if (index == 1) {
-      //         Navigator.pop(context);
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => cart()),
-      //         );
-      //       }
-      //     },
-      //   ),
       bottomNavigationBar: const ButtomNavbar(currentIndex: 4),
     );
   }

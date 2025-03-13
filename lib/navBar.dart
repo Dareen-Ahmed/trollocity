@@ -32,7 +32,7 @@ class ButtomNavbar extends StatelessWidget {
         targetPage =  OrderHistoryPage();
         break;
       case 4:
-        targetPage =  setting();
+        targetPage =  SettingScreen();
         break;
       default:
         targetPage =  home();

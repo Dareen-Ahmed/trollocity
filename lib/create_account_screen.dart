@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,8 +10,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'forgotpassword.dart'; // تأكد من وجود هذه الصفحة
-import 'market.dart'; // Import the MarketChooserScreen
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -27,13 +26,12 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
   Future signInWithGoogle() async {
     try {
       // بدء عملية تسجيل الدخول
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser
-          ?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
       if (googleAuth == null) return; // إذا لم يُكمل المستخدم العملية
 
@@ -44,19 +42,21 @@ class _AuthScreenState extends State<AuthScreen> {
       );
 
       // تسجيل الدخول إلى Firebase
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
         // التحقق مما إذا كان المستخدم موجودًا بالفعل في Firestore
-        final userDoc = await FirebaseFirestore.instance.collection('users')
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
             .doc(user.uid)
             .get();
 
         if (!userDoc.exists) {
           // إذا لم يكن موجودًا، نقوم بإضافته إلى Firestore
-          await FirebaseFirestore.instance.collection('users')
+          await FirebaseFirestore.instance
+              .collection('users')
               .doc(user.uid)
               .set({
             'name': user.displayName ?? 'Unnamed User',
@@ -74,7 +74,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-
   Future<void> _registerUser() async {
     if (!_formKey.currentState!.validate()) {
       return; // Stop if validation fails
@@ -85,8 +84,8 @@ class _AuthScreenState extends State<AuthScreen> {
     String name = nameController.text.trim();
 
     try {
-      final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -209,7 +208,10 @@ class _AuthScreenState extends State<AuthScreen> {
                     width: 350,
                     fit: BoxFit.cover,
                   ),
+
                   const SizedBox(height: 20),
+
+                  // ---- Tab Switcher Row ----
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -218,6 +220,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
+
+                  // ---- Title & Subtitle ----
                   Text(
                     isLogin ? "Welcome Back" : "Create Account",
                     style: const TextStyle(
@@ -234,12 +238,39 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 20),
+
+                  // ---- Name Field (only if creating account) ----
                   if (!isLogin)
-                    _buildTextField(nameController, "First & Last Name",
-                        isName: true),
-                  _buildTextField(emailController, "Email", isPassword: false),
-                  _buildTextField(passwordController, "Password",
-                      isPassword: true),
+                    _buildTextField(
+                      nameController,
+                      "First & Last Name",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "This field cannot be empty.";
+                        }
+                        return null;
+                      },
+                    ),
+
+                  // ---- Email Field ----
+                  _buildTextField(
+                    emailController,
+                    "Email",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "This field cannot be empty.";
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return "Enter a valid email address.";
+                      }
+                      return null;
+                    },
+                  ),
+
+                  // ---- Password Field ----
+                  _buildPasswordField(),
+
+                  // ---- Forgot Password Link (only if Login) ----
                   if (isLogin)
                     Align(
                       alignment: Alignment.centerRight,
@@ -248,7 +279,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const forgotpassword(),
+                              builder: (context) => const ForgotPassword(),
                             ),
                           );
                         },
@@ -265,6 +296,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   const SizedBox(height: 10),
 
                   // ---- Sign In / Verify Button ----
+                  ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         if (isLogin) {
@@ -273,6 +305,31 @@ class _AuthScreenState extends State<AuthScreen> {
                           _registerUser();
                         }
                       }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFde5902),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: Text(isLogin ? "Sign In" : "Verify Account"),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // ---- "Or sign in with" ----
+                  const Text("Or sign in with",
+                      style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 10),
+
+                  // ---- Google Sign-In Button ----
+                  GestureDetector(
+                    onTap: () {
+                      signInWithGoogle();
+                    },
+                    child: _buildSocialButton(
+                      "Continue with Google",
+                      "assets/googleicon.jpg", // Pass asset path instead of a URL
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -332,7 +389,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-
   Widget _buildTab(String title, bool loginTab) {
     return GestureDetector(
       onTap: () {
@@ -355,21 +411,22 @@ class _AuthScreenState extends State<AuthScreen> {
               height: 3,
               width: loginTab ? 50 : 80,
               color: const Color(0xFFde5902),
+            ),
+        ],
+      ),
     );
   }
-
-
 
   Widget _buildSocialButton(String text, String assetPath) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-  Widget _buildTextField(TextEditingController controller, String hint,
-      {bool isPassword = false, bool isName = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: TextFormField(
-        controller: controller,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(assetPath, height: 24),
           // Use Image.asset instead of Image.network
@@ -379,7 +436,6 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
     );
   }
-
 
   void _showVerificationDialog(BuildContext context, User? user) {
     showDialog(
@@ -400,9 +456,6 @@ class _AuthScreenState extends State<AuthScreen> {
       },
     );
   }
-
-
-
 
   void _showConfirmationDialog(BuildContext context, String verificationUrl,
       String device, String location, String time) {
