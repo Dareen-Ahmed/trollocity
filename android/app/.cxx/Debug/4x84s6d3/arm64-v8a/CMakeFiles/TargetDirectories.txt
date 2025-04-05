@@ -1,2 +1,0 @@
-C:/Users/shahd/OneDrive/Desktop/collage stuff/Year 4/Graduation Project/trollocity/android/app/.cxx/Debug/4x84s6d3/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/shahd/OneDrive/Desktop/collage stuff/Year 4/Graduation Project/trollocity/android/app/.cxx/Debug/4x84s6d3/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -1,2 +1,0 @@
-C:/Users/Dareen Ahmed/Downloads/trollocity-main/trollocity-main/android/app/.cxx/Debug/2pu12711/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/Dareen Ahmed/Downloads/trollocity-main/trollocity-main/android/app/.cxx/Debug/2pu12711/armeabi-v7a/CMakeFiles/rebuild_cache.dir
