@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-import 'package:graduation/home.dart';
 import 'OrderDetailsPage.dart'; // Import Order Details Page
 import 'navBar.dart';
-import 'setting.dart'; // Import other pages as needed
-import 'wishlist.dart';
-import 'ChatBotScreen.dart';
-import 'InstructionPage.dart';
-import 'Mango.dart';
-import 'PersonalCarePage.dart';
-import 'SpecialOffersPage.dart';
-import 'Strawberry.dart';
-import 'cart.dart';
-import 'notification.dart';
+
 
 class OrderHistoryPage extends StatefulWidget {
   @override

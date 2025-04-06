@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "75777295928",
+    "firebase_url": "https://triilocity-default-rtdb.firebaseio.com",
+    "project_id": "triilocity",
+    "storage_bucket": "triilocity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75777295928:android:db44fba88ecfd538e5c8cd",
+        "android_client_info": {
+          "package_name": "com.example.graduation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75777295928-thpo3duj6dfq02rjjlcme07d1faughoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graduation",
+            "certificate_hash": "dc538d9d48ef37433f1f11e6a9f0971405a1390c"
+          }
+        },
+        {
+          "client_id": "75777295928-kp1ju9g5st0mq41jtq48r3s9gmmk5ph5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi221VE0RbkjfW8wsZMIIOm2Cxudz0ytE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75777295928-kp1ju9g5st0mq41jtq48r3s9gmmk5ph5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

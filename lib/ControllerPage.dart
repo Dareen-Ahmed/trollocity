@@ -58,7 +58,6 @@ class _ControllerPageState extends State<ControllerPage> {
     });
   }
 
-
   Future<bool> selectDevice() async {
     bool deviceSelected = false;
 
@@ -99,7 +98,6 @@ class _ControllerPageState extends State<ControllerPage> {
     return deviceSelected;
   }
 
-
 Future<void> _connectToDevice(BluetoothDevice device) async {
     try {
       _connection = await _flutterBlue.connect(device.address);
@@ -126,8 +124,6 @@ Future<void> _connectToDevice(BluetoothDevice device) async {
       _cleanupConnection();
     }
   }
-
-
 
   void _handleIncomingData(Uint8List data) {
     print("Received: ${String.fromCharCodes(data)}");
@@ -162,7 +158,6 @@ void disconnect() async {
       print("Device not connected. Command not sent.");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -278,28 +273,6 @@ void disconnect() async {
                   child: Text("Connected to: ${_selectedDevice!.name}"),
                 ),
               SizedBox(height: 20),
-              // Column(
-              //   children: [
-              //     _arrowButton(Icons.arrow_upward, () => sendCommand("F")),
-              //     Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         _arrowButton(Icons.arrow_back, () => sendCommand("L")),
-              //         Container(
-              //           width: 60,
-              //           height: 60,
-              //           decoration: BoxDecoration(
-              //             color: Colors.red,
-              //             shape: BoxShape.circle,
-              //           ),
-              //         ),
-              //         _arrowButton(Icons.arrow_forward, () => sendCommand("R")),
-              //       ],
-              //     ),
-              //     _arrowButton(Icons.arrow_downward, () => sendCommand("B")),
-              //   ],
-              // ),
-
               Column(
                 children: [
                   _arrowButton(
@@ -344,23 +317,6 @@ void disconnect() async {
       bottomNavigationBar: const ButtomNavbar(currentIndex: 2),
     );
   }
-
-  // // Arrow Button Widget
-  // Widget _arrowButton(IconData icon, VoidCallback onPressed) {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(5.0),
-  //     child: ElevatedButton(
-  //       style: ElevatedButton.styleFrom(
-  //         backgroundColor: AppStyles.buttonColor,
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  //         padding: EdgeInsets.all(15),
-  //         minimumSize: Size(60, 60),
-  //       ),
-  //       onPressed: onPressed,
-  //       child: Icon(icon, color: Colors.white, size: 30),
-  //     ),
-  //   );
-  // }
 
   Widget _arrowButton(IconData icon,
       {required VoidCallback onPressed, required VoidCallback onReleased}) {
