@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-import 'PaymentMethods.dart'; 
+import 'PaymentMethods.dart';
 import 'navBar.dart';
-
 
 class cart extends StatefulWidget {
   @override
@@ -11,7 +9,7 @@ class cart extends StatefulWidget {
 }
 
 class _CartState extends State<cart> {
-  int _currentIndex = 1; // Default selected index for the cart screen
+  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -48,34 +46,24 @@ class _CartState extends State<cart> {
               Text("Below is the list of items in your cart.",
                   style: TextStyle(color: Colors.black54)),
               SizedBox(height: 20),
-
-              // Cart Item 1
               CartItem(
                 imageUrl: "https://m.media-amazon.com/images/I/81DypND3rRL.jpg",
                 title: "chocolate",
                 price: "12.00 EGP",
                 description:
-                    "Dark Chocolate: Rich, intense, and perfectly crafted for true cocoa lovers.",
+                "Dark Chocolate: Rich, intense, and perfectly crafted for true cocoa lovers.",
               ),
-
-              // Cart Item 2
               CartItem(
                 imageUrl:
-                    "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
+                "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
                 title: "juhayna pure juice",
                 price: "10.00 EGP",
                 description:
-                    "Refreshingly sweet and tangy, made from natural pineapple for a tropical taste.",
+                "Refreshingly sweet and tangy, made from natural pineapple for a tropical taste.",
               ),
-
               SizedBox(height: 30),
-
-              // Receipt Section
               ReceiptSection(),
-
               SizedBox(height: 20),
-
-              // Continue to Checkout Button
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -88,8 +76,8 @@ class _CartState extends State<cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              PaymentMethods()), // Navigate to PaymentMethods
+                        builder: (context) => PaymentScreen(),
+                      ),
                     );
                   },
                   child: Text("Continue to Checkout",
@@ -100,29 +88,28 @@ class _CartState extends State<cart> {
           ),
         ),
       ),
-
       bottomNavigationBar: const ButtomNavbar(currentIndex: 1),
     );
   }
 }
 
-// Widget for Cart Items
 class CartItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
   final String description;
 
-  const CartItem(
-      {required this.imageUrl,
-      required this.title,
-      required this.price,
-      required this.description});
+  const CartItem({
+    required this.imageUrl,
+    required this.title,
+    required this.price,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-    color: Colors.white,
+      color: Colors.white,
       margin: EdgeInsets.symmetric(vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
@@ -138,7 +125,7 @@ class CartItem extends StatelessWidget {
                 children: [
                   Text(title,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
                   Text("quantity : 1", style: TextStyle(color: Colors.black54)),
                   SizedBox(height: 4),
@@ -164,7 +151,6 @@ class CartItem extends StatelessWidget {
   }
 }
 
-// Widget for Receipt Section
 class ReceiptSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -191,7 +177,7 @@ class ReceiptSection extends StatelessWidget {
                 Text("Subtotal", style: TextStyle(fontSize: 16)),
                 Text("EGP 156.00",
                     style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 8),
@@ -214,10 +200,10 @@ class ReceiptSection extends StatelessWidget {
               children: [
                 Text("Total",
                     style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Text("EGP 131.20",
                     style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
           ],

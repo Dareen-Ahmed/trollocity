@@ -40,63 +40,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
             Navigator.pop(context);
           },
         ),
-        actions: [],
-        centerTitle: false,
         elevation: 2,
       ),
       body: SafeArea(
         top: true,
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFDE5902),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 2,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF317A8B),
-                      ),
-                    ),
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFDE5902),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 2,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF317A8B),
-                      ),
-                    ),
-                    Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFDE5902),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildStepCircle(true),
+                  buildStepLine(),
+                  buildStepCircle(true),
+                  buildStepLine(),
+                  buildStepCircle(true),
+                ],
               ),
               Padding(
                 padding: EdgeInsets.all(20),
@@ -109,37 +70,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildPaymentMethod(
-                    imageUrl: 'assets/PayMethod/visa-logo.png',
-                    title: 'Visa',
-                    value: 'Visa',
-                  ),
-                  SizedBox(height: 20),
-                  _buildPaymentMethod(
-                    imageUrl: 'assets/PayMethod/instapay.jpg',
-                    title: 'InstaPay',
-                    value: 'InstaPay',
-                  ),
-                  SizedBox(height: 20),
-                  _buildPaymentMethod(
-                    imageUrl: 'assets/PayMethod/vodafone.jpg',
-                    title: 'Vodafone cash',
-                    value: 'Vodafone cash',
-                  ),
-                  SizedBox(height: 20),
-                  _buildPaymentMethod(
-                    imageUrl: 'assets/PayMethod/applepay.jpg',
-                    title: 'Apple Pay',
-                    value: 'Apple Pay',
-                  ),
-                ],
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/visa-logo.png',
+                      title: 'Visa',
+                      value: 'Visa',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/instapay.jpg',
+                      title: 'InstaPay',
+                      value: 'InstaPay',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/vodafone.jpg',
+                      title: 'Vodafone cash',
+                      value: 'Vodafone cash',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/applepay.jpg',
+                      title: 'Apple Pay',
+                      value: 'Apple Pay',
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (selectedPaymentMethod != null) {
@@ -170,6 +129,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -182,46 +142,80 @@ class _PaymentScreenState extends State<PaymentScreen> {
     required String title,
     required String value,
   }) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedPaymentMethod = value;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: selectedPaymentMethod == value
+                ? Color(0xFFDE5902)
+                : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                imageUrl,
+                width: 50,
+                height: 50,
+                fit: BoxFit.contain,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Spacer(),
+            Radio<String>(
+              value: value,
+              groupValue: selectedPaymentMethod,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedPaymentMethod = newValue;
+                });
+              },
+              activeColor: Color(0xFFDE5902),
+            ),
+            SizedBox(width: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildStepCircle(bool isActive) {
     return Container(
-      width: double.infinity,
-      height: 60,
+      width: isActive ? 25 : 18,
+      height: isActive ? 25 : 18,
       decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
+        color: isActive ? Color(0xFFDE5902) : Colors.grey,
+        shape: BoxShape.circle,
       ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              imageUrl,
-              width: 50,
-              height: 50,
-              fit: BoxFit.contain,
-            ),
-          ),
-          SizedBox(width: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Spacer(),
-          Radio(
-            value: value,
-            groupValue: selectedPaymentMethod,
-            onChanged: (String? value) {
-              setState(() {
-                selectedPaymentMethod = value;
-              });
-            },
-            activeColor: Color(0xFFDE5902),
-          ),
-        ],
-      ),
+    );
+  }
+
+  Widget buildStepLine() {
+    return Container(
+      width: 100,
+      height: 2,
+      color: Color(0xFF317A8B),
     );
   }
 }
