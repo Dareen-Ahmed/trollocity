@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'PaymentPage.dart'; // Import PaymentPage
 
-void main() {
-  runApp(PaymentMethods());
-}
-
 class PaymentMethods extends StatelessWidget {
+  final double totalAmount;
+
+  PaymentMethods({required this.totalAmount});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PaymentScreen(),
+      home: PaymentScreen(totalAmount: totalAmount),
     );
   }
 }
 
 class PaymentScreen extends StatefulWidget {
+  final double totalAmount;
+
+  PaymentScreen({required this.totalAmount});
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -31,11 +35,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         backgroundColor: AppStyles.primarybackground,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
-            size: 30,
-          ),
+          icon: Icon(Icons.arrow_back_rounded, color: Colors.white, size: 30),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -104,13 +104,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   if (selectedPaymentMethod != null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaymentPage()),
+                      MaterialPageRoute(
+                        builder: (context) => PaymentPage(
+                          totalAmount: widget.totalAmount,
+                          // selectedPaymentMethod: selectedPaymentMethod!,
+                        ),
+                      ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Please select a payment method'),
-                      ),
+                      SnackBar(content: Text('Please select a payment method')),
                     );
                   }
                 },

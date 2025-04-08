@@ -11,6 +11,21 @@ class cart extends StatefulWidget {
 class _CartState extends State<cart> {
   int _currentIndex = 1;
 
+  List<CartItemData> cartItems = [
+    CartItemData(
+      title: "chocolate",
+      price: 12.00,
+      imageUrl: "https://m.media-amazon.com/images/I/81DypND3rRL.jpg",
+    ),
+    CartItemData(
+      title: "juhayna pure juice",
+      price: 10.00,
+      imageUrl: "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
+    ),
+  ];
+
+  double get total => cartItems.fold(0, (sum, item) => sum + item.price);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,23 +61,14 @@ class _CartState extends State<cart> {
               Text("Below is the list of items in your cart.",
                   style: TextStyle(color: Colors.black54)),
               SizedBox(height: 20),
-              CartItem(
-                imageUrl: "https://m.media-amazon.com/images/I/81DypND3rRL.jpg",
-                title: "chocolate",
-                price: "12.00 EGP",
-                description:
-                "Dark Chocolate: Rich, intense, and perfectly crafted for true cocoa lovers.",
-              ),
-              CartItem(
-                imageUrl:
-                "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
-                title: "juhayna pure juice",
-                price: "10.00 EGP",
-                description:
-                "Refreshingly sweet and tangy, made from natural pineapple for a tropical taste.",
-              ),
+              ...cartItems.map((item) => CartItem(
+                title: item.title,
+                price: "${item.price} EGP",
+                description: "Product description here",
+                imageUrl: item.imageUrl,
+              )),
               SizedBox(height: 30),
-              ReceiptSection(),
+              ReceiptSection(total: total),
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
@@ -76,7 +82,7 @@ class _CartState extends State<cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentScreen(),
+                        builder: (context) => PaymentScreen(totalAmount: total),
                       ),
                     );
                   },
@@ -91,6 +97,14 @@ class _CartState extends State<cart> {
       bottomNavigationBar: const ButtomNavbar(currentIndex: 1),
     );
   }
+}
+
+class CartItemData {
+  final String title;
+  final double price;
+  final String imageUrl;
+
+  CartItemData({required this.title, required this.price, required this.imageUrl});
 }
 
 class CartItem extends StatelessWidget {
@@ -152,6 +166,10 @@ class CartItem extends StatelessWidget {
 }
 
 class ReceiptSection extends StatelessWidget {
+  final double total;
+
+  const ReceiptSection({required this.total});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -175,9 +193,8 @@ class ReceiptSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Subtotal", style: TextStyle(fontSize: 16)),
-                Text("EGP 156.00",
-                    style:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text("EGP ${total.toStringAsFixed(2)}",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 8),
@@ -186,7 +203,7 @@ class ReceiptSection extends StatelessWidget {
               children: [
                 Text("Discount",
                     style: TextStyle(fontSize: 16, color: Colors.red)),
-                Text("-EGP 24.20",
+                Text("EGP 0.00",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -199,11 +216,9 @@ class ReceiptSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Total",
-                    style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text("EGP 131.20",
-                    style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text("EGP ${total.toStringAsFixed(2)}",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
           ],
