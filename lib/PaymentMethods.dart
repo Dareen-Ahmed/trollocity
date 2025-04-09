@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-import 'PaymentPage.dart'; // Import PaymentPage
+import 'PaymentPage.dart';
+import 'models/cart_item_data.dart'; // ✅ تم الاستيراد من الملف الخارجي
 
 class PaymentMethods extends StatelessWidget {
   final double totalAmount;
+  final List<CartItemData> cartItems;
 
-  PaymentMethods({required this.totalAmount});
+  PaymentMethods({required this.totalAmount, required this.cartItems});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PaymentScreen(totalAmount: totalAmount),
+      home: PaymentScreen(totalAmount: totalAmount, cartItems: cartItems),
     );
   }
 }
 
 class PaymentScreen extends StatefulWidget {
   final double totalAmount;
+  final List<CartItemData> cartItems;
 
-  PaymentScreen({required this.totalAmount});
+  PaymentScreen({required this.totalAmount, required this.cartItems});
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -107,7 +110,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       MaterialPageRoute(
                         builder: (context) => PaymentPage(
                           totalAmount: widget.totalAmount,
-                          // selectedPaymentMethod: selectedPaymentMethod!,
+                          cartItems: widget.cartItems.map((item) => CartItem(
+                            name: item.title,
+                            price: item.price,
+                            quantity: item.quantity,
+                            description: item.description,
+                            image: item.imageUrl,
+                          )).toList(),
                         ),
                       ),
                     );

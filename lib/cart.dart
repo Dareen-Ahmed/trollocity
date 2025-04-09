@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'PaymentMethods.dart';
 import 'navBar.dart';
+import 'models/cart_item_data.dart'; // ✅ استيراد CartItemData من ملف خارجي
 
 class cart extends StatefulWidget {
   @override
@@ -16,11 +17,15 @@ class _CartState extends State<cart> {
       title: "chocolate",
       price: 12.00,
       imageUrl: "https://m.media-amazon.com/images/I/81DypND3rRL.jpg",
+      quantity: 1,
+      description: "choc"
     ),
     CartItemData(
       title: "juhayna pure juice",
       price: 10.00,
       imageUrl: "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
+      quantity: 1,
+      description: "fresh juice"
     ),
   ];
 
@@ -82,7 +87,10 @@ class _CartState extends State<cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentScreen(totalAmount: total),
+                        builder: (context) => PaymentScreen(
+                          totalAmount: total,
+                          cartItems: cartItems, // تمرير المنتجات هنا ✅
+                        ),
                       ),
                     );
                   },
@@ -97,14 +105,6 @@ class _CartState extends State<cart> {
       bottomNavigationBar: const ButtomNavbar(currentIndex: 1),
     );
   }
-}
-
-class CartItemData {
-  final String title;
-  final double price;
-  final String imageUrl;
-
-  CartItemData({required this.title, required this.price, required this.imageUrl});
 }
 
 class CartItem extends StatelessWidget {

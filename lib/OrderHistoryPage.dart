@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:graduation/app_styles.dart';
-import 'OrderDetailsPage.dart'; // Import Order Details Page
+import 'OrderDetailsPage.dart';
 import 'navBar.dart';
-
 
 class OrderHistoryPage extends StatefulWidget {
   @override
@@ -10,21 +11,16 @@ class OrderHistoryPage extends StatefulWidget {
 }
 
 class _OrderHistoryPageState extends State<OrderHistoryPage> {
-  int _currentIndex = 3; // Default selected index for the Order History screen
-
-  final List<Map<String, String>> orders = [
-    {"id": "1", "price": "500 EGP", "date": "3/5/2025"},
-    {"id": "2", "price": "400 EGP", "date": "25/6/2025"},
-    {"id": "3", "price": "870 EGP", "date": "16/8/2025"},
-    {"id": "4", "price": "780 EGP", "date": "18/9/2025"},
-  ];
+  int _currentIndex = 3;
 
   @override
   Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
-    backgroundColor: AppStyles.backgroundColor,
+      backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-      automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: Text(
           "Order History",
           style: TextStyle(
@@ -44,26 +40,60 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                 style: TextStyle(fontSize: 16, color: AppStyles.textGrey)),
             SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemCount: orders.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (orders[index]["id"] == "1") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OrderDetailsPage()),
-                        );
-                      }
+              child: uid == null
+                  ? Center(child: Text("User not logged in"))
+                  : StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('payments')
+                    .where('uid', isEqualTo: uid)
+                    .orderBy('timestamp', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(child: Text("No orders found."));
+                  }
+
+                  final orders = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
+                      final amount = order['totalAmount'] ?? 'N/A';
+                      final timestamp = order['timestamp'] as Timestamp?;
+                      final date = timestamp != null
+                          ? "${timestamp.toDate().day}/${timestamp.toDate().month}/${timestamp.toDate().year}"
+                          : "Unknown date";
+
+                      return Card(
+                        child: ListTile(
+                          title: Text("Order ${index + 1}"),
+                          subtitle: Text(date),
+                          trailing: Text("$amount EGP"),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderDetailsPage(
+                                  orderData: {
+                                    "orderId": order.id,
+                                    "timestamp": timestamp?.toDate(),
+                                    "totalAmount": order['totalAmount'],
+                                    // "subtotal": order['subtotal'],
+                                    // "tax": order['tax'],
+                                    "items": order['items'],
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
                     },
-                    child: Card(
-                      child: ListTile(
-                        title: Text("Order ${orders[index]["id"]}"),
-                        subtitle: Text(orders[index]["date"]!),
-                        trailing: Text(orders[index]["price"]!),
-                      ),
-                    ),
                   );
                 },
               ),
@@ -71,7 +101,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           ],
         ),
       ),
-
       bottomNavigationBar: const ButtomNavbar(currentIndex: 3),
     );
   }
