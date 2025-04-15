@@ -41,7 +41,7 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'home.dart'; // Import the home screen
+import '../home.dart'; // Import the home screen
 
 class FeedbackPage extends StatelessWidget {
   @override

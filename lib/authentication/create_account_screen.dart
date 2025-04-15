@@ -1,15 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'forgotpassword.dart'; // Ensure this file exists
-import 'home.dart'; // Ensure this screen is available
-import 'market.dart'; // Ensure MarketChooserScreen exists
+import '../home.dart'; // Ensure this screen is available
+import '../market.dart'; // Ensure MarketChooserScreen exists
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'forgotpassword.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

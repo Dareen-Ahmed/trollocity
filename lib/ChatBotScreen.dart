@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
+import 'cart/Cart_ui.dart';
 import 'setting.dart'; // Import the setting screen
 import 'InstructionPage.dart'; // Import the instruction page
 import 'OrderHistoryPage.dart'; // Import the order history page
 import 'home.dart'; // Import the home screen
-import 'cart.dart'; // Import the cart screen
+// import 'cart/MyCart.dart'; // Import the cart screen
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -207,7 +208,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => cart()),
+              MaterialPageRoute(builder: (context) => Cart()),
             );
           } else if (index == 0) {
             // Navigate to Home Page when the home icon is clicked

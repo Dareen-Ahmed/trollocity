@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'app_styles.dart';
+import '../app_styles.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -123,7 +121,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               Center(
                   child: ElevatedButton(
                 onPressed: _sendCode,
-              style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   backgroundColor: AppStyles.buttonColor,
                   // minimumSize: const Size(double.infinity, 50),
                   fixedSize: Size(250, 50),

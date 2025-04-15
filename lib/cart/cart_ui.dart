@@ -1,20 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-import 'PaymentMethods.dart'; 
-import 'navBar.dart';
+import 'package:graduation/cart/provider/provider.dart';
+import 'package:provider/provider.dart';
+import '../navBar.dart';
+import '../payment/PaymentMethods.dart';
+import 'provider/product_db.dart';
 
-
-class cart extends StatefulWidget {
+class Cart extends StatefulWidget {
   @override
   _CartState createState() => _CartState();
 }
 
-class _CartState extends State<cart> {
-  int _currentIndex = 1; // Default selected index for the cart screen
-
+class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
+    // context.read<Proider>
     return Scaffold(
       backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
@@ -48,34 +48,27 @@ class _CartState extends State<cart> {
               Text("Below is the list of items in your cart.",
                   style: TextStyle(color: Colors.black54)),
               SizedBox(height: 20),
+              Consumer<CartProvider>(
+                builder: (context, cartProvider, child) {
+                  final products = cartProvider.products;
+                  if (cartProvider.isLoading) {
+                    return CircularProgressIndicator();
+                  }
+                  if (products.isEmpty) {
+                    return Text("No items in the cart yet.",
+                        style: TextStyle(color: Colors.black54));
+                  }
 
-              // Cart Item 1
-              CartItem(
-                imageUrl: "https://m.media-amazon.com/images/I/81DypND3rRL.jpg",
-                title: "chocolate",
-                price: "12.00 EGP",
-                description:
-                    "Dark Chocolate: Rich, intense, and perfectly crafted for true cocoa lovers.",
+                  return Column(
+                    children: products
+                        .map((product) => CartItem(product: product))
+                        .toList(),
+                  );
+                },
               ),
-
-              // Cart Item 2
-              CartItem(
-                imageUrl:
-                    "https://th.bing.com/th/id/OIP.NpVwGtf_oZB2_X3KOvZ-sgHaHa?rs=1&pid=ImgDetMain",
-                title: "juhayna pure juice",
-                price: "10.00 EGP",
-                description:
-                    "Refreshingly sweet and tangy, made from natural pineapple for a tropical taste.",
-              ),
-
               SizedBox(height: 30),
-
-              // Receipt Section
               ReceiptSection(),
-
               SizedBox(height: 20),
-
-              // Continue to Checkout Button
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -88,8 +81,7 @@ class _CartState extends State<cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              PaymentMethods()), // Navigate to PaymentMethods
+                          builder: (context) => PaymentMethods(items: [])),
                     );
                   },
                   child: Text("Continue to Checkout",
@@ -100,29 +92,20 @@ class _CartState extends State<cart> {
           ),
         ),
       ),
-
       bottomNavigationBar: const ButtomNavbar(currentIndex: 1),
     );
   }
 }
 
-// Widget for Cart Items
 class CartItem extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String price;
-  final String description;
+  final ProductDb product;
 
-  const CartItem(
-      {required this.imageUrl,
-      required this.title,
-      required this.price,
-      required this.description});
+  const CartItem({required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-    color: Colors.white,
+      color: Colors.white,
       margin: EdgeInsets.symmetric(vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
@@ -130,26 +113,27 @@ class CartItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(imageUrl, width: 60, height: 60, fit: BoxFit.cover),
+            Image.network(product.imageUrl,
+                width: 60, height: 60, fit: BoxFit.cover),
             SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
+                  Text(product.name,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Text("quantity : 1", style: TextStyle(color: Colors.black54)),
+                  Text('${product.quantity}', style: TextStyle(color: Colors.black54)),
                   SizedBox(height: 4),
-                  Text(description,
+                  Text(product.description,
                       style: TextStyle(color: Colors.black54, fontSize: 12)),
                 ],
               ),
             ),
             Column(
               children: [
-                Text(price,
+                Text('EGP ${product.price * product.quantity}',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -164,10 +148,14 @@ class CartItem extends StatelessWidget {
   }
 }
 
-// Widget for Receipt Section
 class ReceiptSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.watch<CartProvider>();
+    final subtotal = cartProvider.totalPrice;
+    final discount = subtotal * 0.15;
+    final total = subtotal - discount;
+
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -181,15 +169,11 @@ class ReceiptSection extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: AppStyles.titleText)),
-            SizedBox(height: 8),
-            Text("Below is a list of your items.",
-                style: TextStyle(color: Colors.black54)),
-            Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Subtotal", style: TextStyle(fontSize: 16)),
-                Text("EGP 156.00",
+                Text("EGP ${subtotal.toStringAsFixed(2)}",
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ],
@@ -200,7 +184,7 @@ class ReceiptSection extends StatelessWidget {
               children: [
                 Text("Discount",
                     style: TextStyle(fontSize: 16, color: Colors.red)),
-                Text("-EGP 24.20",
+                Text("-EGP ${discount.toStringAsFixed(2)}",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -215,7 +199,7 @@ class ReceiptSection extends StatelessWidget {
                 Text("Total",
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text("EGP 131.20",
+                Text("EGP ${total.toStringAsFixed(2)}",
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],

@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'authentication/forgotpassword.dart';
+import 'cart/provider/provider.dart';
+import 'services/BluetoothService.dart';
 import 'splash_screen.dart';
-import 'create_account_screen.dart';
-import 'ForgotPassword.dart';
+import 'authentication/create_account_screen.dart';
 import 'home.dart';
 import 'market.dart';
 
@@ -20,7 +22,12 @@ void main() async {
     }
   });
 
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    // Provider(create: (context)=> CartProvider()),
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(BluetoothManager()),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,9 +42,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/createAccount': (context) => const AuthScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
-        '/home': (context) => const home(), // HomeScreen
-        '/markets': (context) => const market(), // MarketScreen
-
+        '/home': (context) => const home(),
+        '/markets': (context) => const market(),
       },
     );
   }

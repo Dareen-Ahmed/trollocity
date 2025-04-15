@@ -144,18 +144,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // Save changes
                       _saveChanges(context);
                     },
-                    child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white) // Loading indicator
-                        : Text(
-                      'Save',
-                      style: TextStyle(fontSize: 18),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal, // Button color
                       minimumSize: Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
+                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white) // Loading indicator
+                        : Text(
+                      'Save',
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ],

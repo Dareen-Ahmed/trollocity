@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/ControllerPage.dart';
 import 'package:graduation/OrderHistoryPage.dart';
-import 'package:graduation/cart.dart';
+// import 'package:graduation/cart/MyCart.dart';
 import 'package:graduation/home.dart';
 import 'package:graduation/setting.dart';
 
-import 'app_styles.dart'; // Import your styles
+import 'app_styles.dart';
+import 'cart/Cart_ui.dart'; // Import your styles
 
 class ButtomNavbar extends StatelessWidget {
   final int currentIndex;
@@ -23,19 +24,19 @@ class ButtomNavbar extends StatelessWidget {
         targetPage = const home();
         break;
       case 1:
-        targetPage =  cart();
+        targetPage = Cart();
         break;
       case 2:
-        targetPage =  ControllerPage();
+        targetPage = ControllerPage();
         break;
       case 3:
-        targetPage =  OrderHistoryPage();
+        targetPage = OrderHistoryPage();
         break;
       case 4:
-        targetPage =  SettingScreen();
+        targetPage = SettingScreen();
         break;
       default:
-        targetPage =  home();
+        targetPage = home();
     }
 
     // Replace current screen with target page

@@ -326,7 +326,7 @@ class BigAdCard extends StatelessWidget {
           );
         },
         child: Container(
-          height: 160,
+          height: 170,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -369,7 +369,7 @@ class BigAdCard extends StatelessWidget {
                       Text(
                         'Exclusive deals, big savings shop now! 🛒💰',
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: 24,
                           color: AppStyles.textDark,
                           fontWeight: FontWeight.w500,
                         ),
