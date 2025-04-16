@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
+import 'package:graduation/cart/provider/product_db.dart';
 import 'package:graduation/cart/provider/provider.dart';
 import 'package:provider/provider.dart';
 import '../navBar.dart';
 import '../payment/PaymentMethods.dart';
-import 'provider/product_db.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
-    // context.read<Proider>
+    final cartProvider = context.read<CartProvider>();
     return Scaffold(
       backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
@@ -81,7 +81,11 @@ class _CartState extends State<Cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaymentMethods(items: [])),
+                        builder: (context) => PaymentMethods(
+                          cartItems: cartProvider.products,
+                          totalAmount: cartProvider.totalPrice,
+                        ),
+                      ),
                     );
                   },
                   child: Text("Continue to Checkout",
@@ -124,7 +128,8 @@ class CartItem extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
-                  Text('${product.quantity}', style: TextStyle(color: Colors.black54)),
+                  Text('${product.quantity}',
+                      style: TextStyle(color: Colors.black54)),
                   SizedBox(height: 4),
                   Text(product.description,
                       style: TextStyle(color: Colors.black54, fontSize: 12)),

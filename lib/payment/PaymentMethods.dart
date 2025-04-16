@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-
+import '../cart/provider/product_db.dart';
 import 'PaymentPage.dart';
+// import 'models/cart_item_data.dart'; // ✅ تم الاستيراد من الملف الخارجي
 
 class PaymentMethods extends StatelessWidget {
-  final List items;
+  final double totalAmount;
+  final List<ProductDb> cartItems;
 
-  const PaymentMethods({required this.items, Key? key}) : super(key: key);
+  PaymentMethods({required this.totalAmount, required this.cartItems});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PaymentScreen(items: items),
+      home: PaymentScreen(totalAmount: totalAmount, cartItems: cartItems),
     );
   }
 }
 
 class PaymentScreen extends StatefulWidget {
-  final List items;
+  final double totalAmount;
+  final List<ProductDb> cartItems;
 
-  const PaymentScreen({required this.items, Key? key}) : super(key: key);
+  PaymentScreen({required this.totalAmount, required this.cartItems});
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -36,11 +39,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         backgroundColor: AppStyles.primarybackground,
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
-            size: 30,
-          ),
+          icon: Icon(Icons.arrow_back_rounded, color: Colors.white, size: 30),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -50,18 +49,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
       body: SafeArea(
         top: true,
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             children: [
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildStepCircle(true),
-                  _buildStepLine(),
-                  _buildStepCircle(true),
-                  _buildStepLine(),
-                  _buildStepCircle(true),
+                  buildStepCircle(true),
+                  buildStepLine(),
+                  buildStepCircle(true),
+                  buildStepLine(),
+                  buildStepCircle(true),
                 ],
               ),
               Padding(
@@ -75,42 +74,58 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
               ),
-              _buildPaymentMethod(
-                imageUrl: 'assets/PayMethod/visa-logo.png',
-                title: 'Visa',
-                value: 'Visa',
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/visa-logo.png',
+                      title: 'Visa',
+                      value: 'Visa',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/instapay.jpg',
+                      title: 'InstaPay',
+                      value: 'InstaPay',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/vodafone.jpg',
+                      title: 'Vodafone cash',
+                      value: 'Vodafone cash',
+                    ),
+                    SizedBox(height: 20),
+                    _buildPaymentMethod(
+                      imageUrl: 'assets/PayMethod/applepay.jpg',
+                      title: 'Apple Pay',
+                      value: 'Apple Pay',
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 20),
-              _buildPaymentMethod(
-                imageUrl: 'assets/PayMethod/instapay.jpg',
-                title: 'InstaPay',
-                value: 'InstaPay',
-              ),
-              SizedBox(height: 20),
-              _buildPaymentMethod(
-                imageUrl: 'assets/PayMethod/vodafone.jpg',
-                title: 'Vodafone cash',
-                value: 'Vodafone cash',
-              ),
-              SizedBox(height: 20),
-              _buildPaymentMethod(
-                imageUrl: 'assets/PayMethod/applepay.jpg',
-                title: 'Apple Pay',
-                value: 'Apple Pay',
-              ),
-              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (selectedPaymentMethod != null) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaymentPage()),
+                      MaterialPageRoute(
+                        builder: (context) => PaymentPage(
+                          totalAmount: widget.totalAmount,
+                          cartItems: widget.cartItems
+                              .map((item) => CartItem(
+                                    name: item.name,
+                                    price: item.price,
+                                    quantity: item.quantity,
+                                    description: item.description,
+                                    image: item.imageUrl,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Please select a payment method'),
-                      ),
+                      SnackBar(content: Text('Please select a payment method')),
                     );
                   }
                 },
@@ -129,6 +144,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -141,61 +157,76 @@ class _PaymentScreenState extends State<PaymentScreen> {
     required String title,
     required String value,
   }) {
-    return Container(
-      width: double.infinity,
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              imageUrl,
-              width: 50,
-              height: 50,
-              fit: BoxFit.contain,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedPaymentMethod = value;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: selectedPaymentMethod == value
+                ? Color(0xFFDE5902)
+                : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                imageUrl,
+                width: 50,
+                height: 50,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-          SizedBox(width: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
+            SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Spacer(),
-          Radio(
-            value: value,
-            groupValue: selectedPaymentMethod,
-            onChanged: (String? val) {
-              setState(() {
-                selectedPaymentMethod = val;
-              });
-            },
-            activeColor: Color(0xFFDE5902),
-          ),
-        ],
+            Spacer(),
+            Radio<String>(
+              value: value,
+              groupValue: selectedPaymentMethod,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedPaymentMethod = newValue;
+                });
+              },
+              activeColor: Color(0xFFDE5902),
+            ),
+            SizedBox(width: 10),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildStepCircle(bool filled) {
+  Widget buildStepCircle(bool isActive) {
     return Container(
-      width: filled ? 25 : 18,
-      height: filled ? 25 : 18,
+      width: isActive ? 25 : 18,
+      height: isActive ? 25 : 18,
       decoration: BoxDecoration(
-        color: Color(0xFFDE5902),
+        color: isActive ? Color(0xFFDE5902) : Colors.grey,
         shape: BoxShape.circle,
       ),
     );
   }
 
-  Widget _buildStepLine() {
+  Widget buildStepLine() {
     return Container(
       width: 100,
       height: 2,
@@ -203,4 +234,3 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 }
-
