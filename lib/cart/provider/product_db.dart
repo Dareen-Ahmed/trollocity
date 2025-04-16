@@ -5,7 +5,7 @@ class ProductDb {
   final String name;
   final String description;
   final num price;
-  late final num quantity;
+  final num quantity;
 
   ProductDb(
       {required this.imageUrl,
@@ -18,7 +18,7 @@ class ProductDb {
     final data = doc.data() as Map<String, dynamic>;
 
     return ProductDb(
-        imageUrl: data['imageUrl'] ?? '',
+        imageUrl: data['image'] ?? '',
         name: data['name'] ?? '',
         description: data['description'] ?? '',
         price: data['price'] ?? 0,

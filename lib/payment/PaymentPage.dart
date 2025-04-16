@@ -8,8 +8,8 @@ import 'PaymentConfirmationPage.dart';
 // ✅ تعريف موديل العنصر في السلة
 class CartItem {
   final String name;
-  final double price;
-  final int quantity;
+  final num price;
+  final num quantity;
   final String description;
   final String image;
 
