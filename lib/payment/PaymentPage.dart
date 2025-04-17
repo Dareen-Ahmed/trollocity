@@ -3,28 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graduation/app_styles.dart';
+import 'package:graduation/cart/provider/product_db.dart';
 import 'PaymentConfirmationPage.dart';
-
-// ✅ تعريف موديل العنصر في السلة
-class CartItem {
-  final String name;
-  final num price;
-  final num quantity;
-  final String description;
-  final String image;
-
-  CartItem({
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.description,
-    required this.image,
-  });
-}
 
 class PaymentPage extends StatefulWidget {
   final double totalAmount;
-  final List<CartItem> cartItems; // ✅ استلام قائمة المنتجات
+  final List<ProductDb> cartItems; // ✅ استلام قائمة المنتجات
 
   PaymentPage({required this.totalAmount, required this.cartItems});
 
@@ -250,7 +234,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           'price': item.price,
                           'quantity': item.quantity,
                           'description': item.description,
-                          'image': item.image,
+                          'image': item.imageUrl,
                         }).toList();
 
                         await FirebaseFirestore.instance.collection('payments').add({

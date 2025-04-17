@@ -12,9 +12,8 @@ class PaymentMethods extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: PaymentScreen(totalAmount: totalAmount, cartItems: cartItems),
-    );
+    return  Scaffold(body: PaymentScreen(totalAmount: totalAmount, cartItems: cartItems));
+
   }
 }
 
@@ -112,12 +111,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         builder: (context) => PaymentPage(
                           totalAmount: widget.totalAmount,
                           cartItems: widget.cartItems
-                              .map((item) => CartItem(
+                              .map((item) => ProductDb(
                                     name: item.name,
                                     price: item.price,
                                     quantity: item.quantity,
                                     description: item.description,
-                                    image: item.imageUrl,
+                                    imageUrl: item.imageUrl,
                                   ))
                               .toList(),
                         ),
