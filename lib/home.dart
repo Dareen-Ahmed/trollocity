@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'package:graduation/navBar.dart';
+import 'SearchResultsPage.dart';
 import 'wishlist.dart';
 import 'ChatBotScreen.dart';
 import 'Mango.dart';
@@ -43,10 +45,10 @@ class home extends StatelessWidget {
           ],
         ),
       ),
-      
+
       bottomNavigationBar: const ButtomNavbar(currentIndex: 0),
 
-      
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the chatbot page when the button is pressed
@@ -54,7 +56,7 @@ class home extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    ChatbotScreen()), // Replace with actual chat bot page
+                    ChatBotScreen()), // Replace with actual chat bot page
           );
         },
         backgroundColor: Color(0xFF317A8B), // Color for the chat icon
@@ -80,7 +82,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hi Ahmed',
+            'Hi ,',
             style: AppStyles.appBarGreeting,
           ),
           Row(
@@ -126,8 +128,27 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(80);
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   const SearchField({super.key});
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  final TextEditingController _controller = TextEditingController();
+
+  void _onSearch() {
+    final query = _controller.text.trim();
+    if (query.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SearchResultsPage(query: query),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,11 +156,13 @@ class SearchField extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          // Expanded makes the search field take available space
           Expanded(
             child: TextField(
+              controller: _controller,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => _onSearch(),
               decoration: InputDecoration(
-                hintText: "Search...",
+                hintText: "Search products...",
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
                 fillColor: Colors.white,
@@ -150,15 +173,25 @@ class SearchField extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10), // Add spacing between search and icon
+          const SizedBox(width: 10),
+          ElevatedButton(
+            onPressed: _onSearch,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF317A8B),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            ),
+            child: const Icon(Icons.search, color: Colors.white),
+          ),
+          const SizedBox(width: 10),
           IconButton(
             icon: const Icon(Icons.favorite_border),
-            color: Color(0xFF317A8B), // Set heart icon color to match app bar
+            color: const Color(0xFF317A8B),
             iconSize: 30,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const wishlist()),
+                MaterialPageRoute(builder: (_) => const WishlistPage
+                  ()),
               );
             },
           ),
@@ -167,6 +200,7 @@ class SearchField extends StatelessWidget {
     );
   }
 }
+
 
 class CategoryList extends StatelessWidget {
   final List<String> categories;
@@ -210,70 +244,56 @@ class FreshProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            // Fresh Strawberry (Clickable)
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Strawberry(
-                      productName: "Fresh Strawberry",
-                      productImage: "assets/HomePage/strawberry.jpg",
-                      productPrice: "25 EGP",
-                      productDescription:
-                          "🍓 1Kg of fresh, juicy strawberries—sweet, delicious, and perfect for any treat! 🍓✨",
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('home').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text("No products found"));
+          }
+
+          final docs = snapshot.data!.docs;
+
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: docs.map((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (data['name'] == 'Fresh Strawberry') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Strawberry(productName: '', productImage: '', productPrice: '', productDescription: '',)),
+                        );
+                      } else if (data['name'] == 'Mango') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Mango(productName: '', productImage: '', productPrice: '', productDescription: '',)),
+                        );
+                      } else {
+                        // لو حابة تعملي صفحة عامة لكل المنتجات
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("No page defined for ${data['name']}")),
+                        );
+                      }
+                    },
+
+                    child: ProductCard(
+                      imageUrl: data['image'],
+                      title: data['name'],
                     ),
                   ),
                 );
-              },
-              child: ProductCard(
-                imageUrl: "assets/HomePage/strawberry.jpg",
-                title: "Fresh Strawberry",
-              ),
+              }).toList(),
             ),
-            const SizedBox(width: 10),
-
-            // Fresh Mango (Clickable)
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Mango(
-                      productName: "Fresh Mango",
-                      productImage: "assets/HomePage/mango.jpg",
-                      productPrice: "30 EGP",
-                      productDescription:
-                          "🥭 1Kg of fresh, sweet mangos—pure tropical goodness in every bite! 🥭✨",
-                    ),
-                  ),
-                );
-              },
-              child: ProductCard(
-                imageUrl: "assets/HomePage/mango.jpg",
-                title: "Fresh Mango",
-              ),
-            ),
-            const SizedBox(width: 10),
-
-            // Fresh Pineapple (❌ Not Clickable)
-            const ProductCard(
-              imageUrl: 'assets/HomePage/pineapple.jpg',
-              title: "Fresh Pineapple",
-            ),
-            const SizedBox(width: 10),
-
-            // Fresh Apple (❌ Not Clickable)
-            const ProductCard(
-              imageUrl: "assets/HomePage/apple.jpg",
-              title: "Fresh Apple",
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -282,22 +302,30 @@ class FreshProducts extends StatelessWidget {
 class ProductCard extends StatelessWidget {
   final String imageUrl;
   final String title;
+
   const ProductCard({super.key, required this.imageUrl, required this.title});
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork = imageUrl.startsWith('http');
+
     return Card(
-    color: Colors.white,
+      color: Colors.white,
       elevation: 1,
-      // Add these properties for rounded corners
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // Adjust radius as needed
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      clipBehavior:
-          Clip.antiAlias, // This ensures children clip to the rounded borders
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          Image.asset(imageUrl, height: 150, width: 190, fit: BoxFit.cover),
+          Image(
+            image: isNetwork
+                ? NetworkImage(imageUrl)
+                : AssetImage(imageUrl) as ImageProvider,
+            height: 150,
+            width: 190,
+            fit: BoxFit.cover,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(title,
@@ -308,6 +336,7 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
 
 class BigAdCard extends StatelessWidget {
   const BigAdCard({super.key});

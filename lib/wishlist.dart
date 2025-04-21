@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'app_styles.dart';
 
-class wishlist extends StatelessWidget {
-  const wishlist({super.key});
+class WishlistPage extends StatelessWidget {
+  const WishlistPage({super.key});
+
+  Future<void> deleteItem(String docId) async {
+    await FirebaseFirestore.instance.collection('Wishlist').doc(docId).delete();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,40 +24,51 @@ class wishlist extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: AppStyles.textLight, // You can change this color as needed
-            size: 30,
-          ),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 30),
           onPressed: () => Navigator.pop(context),
           style: IconButton.styleFrom(
-              backgroundColor: Colors.transparent, minimumSize: Size(60, 60)),
+            backgroundColor: Colors.transparent,
+            minimumSize: const Size(60, 60),
+          ),
         ),
-        backgroundColor: Color(0xFF317A8B),
+        backgroundColor: const Color(0xFF317A8B),
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child: Column(
-          children: const [
-            WishlistItem(
-              imageUrl:
-                  "https://th.bing.com/th/id/OIP.w5bG6DUJurIgHUnjaUhTVgAAAA?rs=1&pid=ImgDetMain",
-              title: "Spuds Chips",
-              price: "15.00 EGP",
-              description: "Craft Cooked Sour Cream & Onion",
-            ),
-            SizedBox(height: 10),
-            WishlistItem(
-              imageUrl:
-                  "https://th.bing.com/th/id/OIP.B8iQFUOc-Y997Z4a1jDhZwAAAA?rs=1&pid=ImgDetMain",
-              title: "Bounty Chocolate & Coconut Ice Cream",
-              price: "450.00 EGP",
-              description:
-                  "Enjoy the rich, creamy coconut ice cream enrobed in smooth milk chocolate for a delightful treat that transports you to a paradise of flavor.",
-            ),
-          ],
-        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Wishlist').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return const Center(child: CircularProgressIndicator());
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty)
+            return const Center(child: Text("Your wishlist is empty."));
+
+          final docs = snapshot.data!.docs;
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final doc = docs[index];
+              final data = doc.data()! as Map<String, dynamic>;
+
+              // Safely convert price to String
+              final priceString = data['price']?.toString() ?? '';
+
+              return Column(
+                children: [
+                  WishlistItem(
+                    imageUrl: data['imageUrl'] ?? '',
+                    title: data['title'] ?? 'No title',
+                    price: priceString,
+                    description: data['description'] ?? '',
+                    onDelete: () => deleteItem(doc.id),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -64,6 +79,7 @@ class WishlistItem extends StatelessWidget {
   final String title;
   final String price;
   final String description;
+  final VoidCallback onDelete;
 
   const WishlistItem({
     super.key,
@@ -71,6 +87,7 @@ class WishlistItem extends StatelessWidget {
     required this.title,
     required this.price,
     required this.description,
+    required this.onDelete,
   });
 
   @override
@@ -93,16 +110,25 @@ class WishlistItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                imageUrl,
-                width: 120, // Centered image size
-                height: 120,
-                fit: BoxFit.cover,
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    imageUrl,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: onDelete,
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           Padding(
@@ -110,16 +136,13 @@ class WishlistItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
-                ),
+                Text(description,
+                    style: TextStyle(
+                        color: Colors.grey.shade700, fontSize: 14)),
               ],
             ),
           ),
@@ -128,7 +151,8 @@ class WishlistItem extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Text(
               price,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ],

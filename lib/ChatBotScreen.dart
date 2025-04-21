@@ -1,238 +1,214 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:graduation/app_styles.dart';
 import 'cart/Cart_ui.dart';
-import 'setting.dart'; // Import the setting screen
-import 'InstructionPage.dart'; // Import the instruction page
-import 'OrderHistoryPage.dart'; // Import the order history page
-import 'home.dart'; // Import the home screen
-// import 'cart/MyCart.dart'; // Import the cart screen
+import 'setting.dart';
+import 'InstructionPage.dart';
+import 'OrderHistoryPage.dart';
+import 'home.dart';
 
-class ChatbotScreen extends StatefulWidget {
-  const ChatbotScreen({super.key});
-
+class ChatBotScreen extends StatefulWidget {
   @override
-  _ChatbotScreenState createState() => _ChatbotScreenState();
+  _ChatBotScreenState createState() => _ChatBotScreenState();
 }
 
-class _ChatbotScreenState extends State<ChatbotScreen> {
-  final List<Map<String, dynamic>> messages = [
-    {"text": "Hello! Welcome to Smart Trolley. How can I assist you today?", "isUser": false},
-    {"text": "I need help finding an item.", "isUser": true},
-    {"text": "Sure! What item are you looking for?", "isUser": false},
-    {"text": "Where can I find fresh milk?", "isUser": true},
-    {"text": "Fresh milk is available in the Dairy section, Aisle 3.", "isUser": false},
-    {"text": "Can you suggest some offers?", "isUser": true},
-    {"text": "Yes! We have a 20% discount on cereals and buy-one-get-one-free on select beverages.", "isUser": false},
-    {"text": "How do I check out using the smart trolley?", "isUser": true},
-    {"text": "You can scan your items using the trolley's built-in scanner and pay directly via the app.", "isUser": false},
-    {"text": "Thanks! That's helpful.", "isUser": true},
-    {"text": "You're welcome! Happy shopping!", "isUser": false}
-  ]
-  ;
+class _ChatBotScreenState extends State<ChatBotScreen> {
+  TextEditingController _controller = TextEditingController();
+  List<Map<String, String>> _messages = [];
 
-  bool isTyping = false; // To show typing indicator
+  List<String> productCategories = ['Bread', 'Egg', 'Fruits', 'Milk', 'Juices'];
+
+  Future<String> _handleMessage(String userMessage) async {
+    final message = userMessage.toLowerCase().trim();
+
+    String? category;
+    for (var c in productCategories) {
+      if (message.contains(c.toLowerCase())) {
+        category = c;
+        break;
+      }
+    }
+
+    if (category == null) {
+      return "❗ Please mention a valid product name like 'milk', 'egg', or 'bread'.";
+    }
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('chatbot')
+          .doc(category)
+          .get();
+
+      if (!doc.exists) return "❌ No data found for '$category'.";
+
+      final data = doc.data()!;
+      final buffer = StringBuffer();
+
+      if (_containsAny(message, ['where', 'location', 'فين', 'مكان', 'ألاقي', 'قسم'])) {
+        return "📍 $category is located at: ${data['location'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['available', 'availability', 'موجود', 'متاح'])) {
+        return "✅ $category availability: ${data['available'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['brand', 'ماركة', 'brands', 'ماركات'])) {
+        return "🏷 Brands of $category: ${data['brand'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['offer', 'offers', 'عرض', 'عروض'])) {
+        return "💸 Current offer for $category: ${data['offer'] ?? 'None'}";
+      }
+
+      if (_containsAny(message, ['alternative', 'بديل', 'بدائل'])) {
+        return "🔄 Alternative to $category: ${data['alternative'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['good', 'goodfor', 'benefit', 'مفيد', 'ينفع', 'كويس'])) {
+        return "💚 $category is good for: ${data['goodfor'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['bad', 'badfor', 'مضر', 'ماينفعش', 'مش مناسب', 'ضار'])) {
+        return "⚠ $category may be harmful for: ${data['badfor'] ?? 'Unknown'}";
+      }
+
+      if (_containsAny(message, ['calorie', 'calories', 'سعرات', 'طاقة'])) {
+        return "🔥 $category has ${data['calories'] ?? 'Unknown'} calories.";
+      }
+
+      buffer.writeln("ℹ Here's what I know about $category:");
+      data.forEach((key, value) {
+        String emoji = _getEmojiForField(key);
+        buffer.writeln("- $emoji ${_capitalize(key)}: $value");
+      });
+
+      return buffer.toString();
+    } catch (e) {
+      return "⚠ Error retrieving info: $e";
+    }
+  }
+
+  bool _containsAny(String message, List<String> keywords) {
+    return keywords.any((keyword) => message.contains(keyword.toLowerCase()));
+  }
+
+  String _getEmojiForField(String key) {
+    switch (key.toLowerCase()) {
+      case 'location':
+        return '📍';
+      case 'available':
+        return '✅';
+      case 'brand':
+        return '🏷';
+      case 'offer':
+        return '💸';
+      case 'alternative':
+        return '🔄';
+      case 'goodfor':
+        return '💚';
+      case 'badfor':
+        return '⚠';
+      case 'calories':
+        return '🔥';
+      default:
+        return 'ℹ';
+    }
+  }
+
+  String _capitalize(String s) {
+    if (s.isEmpty) return s;
+    return s[0].toUpperCase() + s.substring(1);
+  }
+
+  void _sendMessage() async {
+    final userText = _controller.text.trim();
+    if (userText.isEmpty) return;
+
+    setState(() {
+      _messages.add({'sender': 'user', 'text': userText});
+      _controller.clear();
+    });
+
+    final botResponse = await _handleMessage(userText);
+
+    setState(() {
+      _messages.add({'sender': 'bot', 'text': botResponse});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    backgroundColor: AppStyles.backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "AI Chat",
-          style: TextStyle(
-            color: AppStyles.textLight,
-            fontFamily: 'Inter',
-            fontSize: 36,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: AppStyles.primarybackground,
-      ),
+      appBar: AppBar(title: Text("Smart Supermarket Bot")),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(10),
-              itemCount: messages.length + (isTyping ? 1 : 0), // Add extra item for typing indicator
-              itemBuilder: (context, index) {
-                if (index == messages.length && isTyping) {
-                  // Typing Indicator
-                  return Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppStyles.fadedColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Text(
-                          "...",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                bool isUserMessage = messages[index]["isUser"];
+              itemCount: _messages.length,
+              itemBuilder: (_, index) {
+                final message = _messages[index];
+                final isUser = message['sender'] == 'user';
                 return Align(
-                  alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding: const EdgeInsets.all(12),
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isUserMessage ? AppStyles.fadedColor: Colors.grey.shade300,
+                      color: isUser ? Colors.blue[100] : Colors.grey[300],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          messages[index]["text"],
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 5),
-                        GestureDetector(
-                          onTap: () {
-                            // Handle text copy
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Icon(Icons.copy, size: 16, color: Colors.black54),
-                              SizedBox(width: 5),
-                              Text(
-                                "Copy response",
-                                style: TextStyle(fontSize: 12, color: Colors.black54),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: Text(message['text']!),
                   ),
                 );
               },
             ),
           ),
-
-          // Message Input
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
-              color: Colors.white,
-            ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: TextField(
+                    controller: _controller,
                     decoration: InputDecoration(
-                      hintText: "Type something...",
-                      border: InputBorder.none,
+                      hintText: 'Ask anything about products...',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: AppStyles.buttonColor),
-                  onPressed: () {
-                    setState(() {
-                      isTyping = true;
-                    });
-                    Future.delayed(const Duration(seconds: 2), () {
-                      setState(() {
-                        isTyping = false;
-                        messages.add({"text": "Processing your request...", "isUser": false});
-                      });
-                    });
-                  },
-                ),
+                  icon: Icon(Icons.send),
+                  onPressed: _sendMessage,
+                )
               ],
             ),
-          ),
+          )
         ],
       ),
-      // Add the bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppStyles.backgroundColor,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.trolley),
-            label: 'Controller',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Order History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.trolley), label: 'Controller'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Order History'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
         onTap: (index) {
-          // Handle tap events for bottom navigation icons
           if (index == 4) {
-            // Navigate to Settings screen when the Settings icon is clicked
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SettingScreen()),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingScreen()));
           } else if (index == 2) {
-            // Navigate to Instruction Page when the controller icon is clicked
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => InstructionPage()),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => InstructionPage()));
           } else if (index == 3) {
-            // Navigate to Order History Page when the history icon is clicked
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderHistoryPage()));
           } else if (index == 1) {
-            // Navigate to Cart Page when the cart icon is clicked
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Cart()),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
           } else if (index == 0) {
-            // Navigate to Home Page when the home icon is clicked
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const home()),
-            );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const home()));
           }
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Navigate to the chatbot page when the button is pressed
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => ChatbotScreen()), // Replace with actual chat bot page
-      //     );
-      //   },
-      //   backgroundColor: Colors.teal.shade700, // Color for the chat icon
-      //   child: const Icon(Icons.chat, color: Colors.white), // Chat icon
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation
-      //     .endFloat, // Position the button in the bottom right corner
     );
   }
 }

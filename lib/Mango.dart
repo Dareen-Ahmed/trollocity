@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'app_styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:graduation/app_styles.dart';
 
 class Mango extends StatelessWidget {
   final String productName;
@@ -8,151 +8,175 @@ class Mango extends StatelessWidget {
   final String productPrice;
   final String productDescription;
 
-  Mango({
-    required this.productName,
-    required this.productImage,
-    required this.productPrice,
-    required this.productDescription,
+  const Mango({
+    super.key,
+    this.productName = '',
+    this.productImage = '',
+    this.productPrice = '',
+    this.productDescription = '',
   });
+
+  Future<Map<String, dynamic>> fetchMangoData() async {
+    final doc = await FirebaseFirestore.instance
+        .collection('Mango')
+        .doc('Fresh Mango')
+        .get();
+
+    if (doc.exists) {
+      return doc.data()!;
+    } else {
+      return {
+        'name': productName,
+        'image': productImage,
+        'price': productPrice,
+        'Details': productDescription,
+      };
+    }
+  }
+
+  Future<void> addToWishlist(BuildContext context, Map<String, dynamic> data) async {
+    try {
+      await FirebaseFirestore.instance.collection('Wishlist').add({
+        'imageUrl': data['image'],
+        'title': data['name'],
+        'description': data['Details'],
+        'price': data['price'].toString(),
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Added to Wishlist')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding to wishlist: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    backgroundColor: AppStyles.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF317a8b), // Updated AppBar color
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Changed icon color for better contrast
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(-1, -1),
-                child: Padding(
-                  padding: EdgeInsets.all(20),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchMangoData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        }
+
+        final data = snapshot.data!;
+        final name = data['name'] ?? productName;
+        final image = data['image'] ?? productImage;
+        final price = data['price']?.toString() ?? productPrice;
+        final description = data['Details'] ?? productDescription;
+
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: AppStyles.backgroundColor,
+          appBar: AppBar(
+            backgroundColor: const Color(0xFF317A8B),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+          body: SafeArea(
+            top: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image
+                Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     height: 350,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        alignment: AlignmentDirectional(0, -1),
-                        image: Image.network(
-                          'https://t3.ftcdn.net/jpg/03/07/25/30/360_F_307253040_tksBpDSZ5f7ctN1RILBhbWebrdIOqhOa.jpg',
-                        ).image,
+                        image: image.startsWith('http')
+                            ? NetworkImage(image)
+                            : AssetImage(image) as ImageProvider,
                       ),
-                      boxShadow: [
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 4,
                           color: Color(0x33000000),
-                          offset: Offset(
-                            0,
-                            2,
-                          ),
-                        )
+                          offset: Offset(0, 2),
+                        ),
                       ],
-                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Fresh Mango',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Flexible(
-                      child: Align(
-                        alignment: AlignmentDirectional(1, 1),
-                        child: Text(
-                          '30 EGP',
+
+                // Name & Price
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(name,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600)),
+                      Text('$price EGP',
                           style: TextStyle(
-                              fontFamily: 'Inter',
-                              color: AppStyles.textGrey,
                               fontSize: 20,
-                              fontWeight: FontWeight.w500),
+                              fontWeight: FontWeight.w500,
+                              color: AppStyles.textGrey)),
+                    ],
+                  ),
+                ),
+
+                const Divider(thickness: 2, color: Color(0xffe0e3e7)),
+
+                // Details label
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  child: Text('Details',
+                      style:
+                      TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
+                ),
+
+                // Description
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(description, style: AppStyles.bodyText),
+                ),
+
+                const Divider(thickness: 2, color: Color(0xffe0e3e7)),
+
+                // Add to Wishlist Button
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: ElevatedButton(
+                      onPressed: () => addToWishlist(context, data),
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(280, 60),
+                        backgroundColor: AppStyles.buttonColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 2,
-                color: Color(0xffe0e3e7),
-              ),
-              Align(
-                alignment: Alignment(-1, -1),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 10),
-                  child: Text(
-                    'Details',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 25,
-                      fontWeight: FontWeight.w800,
+                      child: Text('Add to Wishlist',
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                              color: AppStyles.textLight)),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                child: Text(
-                  '🥭 1kg of fresh, sweet mangos—pure tropical goodness in every bite! ',
-                  style: AppStyles.bodyText,
-                ),
-              ),
-              Divider(
-                thickness: 2,
-                color: Color(0xffe0e3e7),
-              ),
-              Flexible(
-                  child: Align(
-                alignment: AlignmentDirectional(0, 0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    print('Button pressed...');
-                  },
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                      fixedSize: Size(280, 60),
-                      backgroundColor: AppStyles.buttonColor),
-                  child: Text(
-                    'Add to WishList',
-                    style: TextStyle(
-                      color: AppStyles.textLight,
-                      fontFamily: 'Inter Tight',
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ))
-            ],
+              ],
+            ),
           ),
-        )
+        );
+      },
     );
   }
 }
