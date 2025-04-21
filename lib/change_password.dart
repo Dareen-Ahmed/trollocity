@@ -96,7 +96,7 @@ class _ChangePasswordScreenState extends State<change_password> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const market(),
+                          builder: (context) => const Market(),
                         ),
                       );
                     } else {

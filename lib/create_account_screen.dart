@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,6 +9,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -21,56 +21,84 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
   bool _isPasswordVisible = false;
+  bool _rememberMe = false; // Added for Remember Me
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
   Future signInWithGoogle() async {
     try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      // هذا السطر يجعل Google يظهر للمستخدم اختيار الحساب كل مرة
+      await googleSignIn.signOut();
+
       // بدء عملية تسجيل الدخول
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      await googleUser?.authentication;
 
-      if (googleAuth == null) return; // إذا لم يُكمل المستخدم العملية
+      if (googleAuth == null) return;
 
-      // إنشاء بيانات الاعتماد لـ Firebase
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // تسجيل الدخول إلى Firebase
       final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
-        // التحقق مما إذا كان المستخدم موجودًا بالفعل في Firestore
         final userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .get();
 
         if (!userDoc.exists) {
-          // إذا لم يكن موجودًا، نقوم بإضافته إلى Firestore
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .set({
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
             'name': user.displayName ?? 'Unnamed User',
             'email': user.email ?? '',
-            'createdAt': Timestamp.now(), // وقت التسجيل
+            'createdAt': Timestamp.now(),
           });
         }
       }
 
-      // الانتقال إلى الصفحة الرئيسية بعد تسجيل الدخول
-      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/market', (route) => false);
     } catch (e) {
       print("Error signing in with Google: $e");
       _showErrorDialog("An error occurred while signing in with Google.");
+    }
+  }
+
+
+  Future<void> _loadSavedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      emailController.text = prefs.getString('saved_email') ?? '';
+      passwordController.text = prefs.getString('saved_password') ?? '';
+      _rememberMe = prefs.getBool('remember_me') ?? false;
+    });
+  }
+
+  Future<void> _handleRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_rememberMe) {
+      await prefs.setString('saved_email', emailController.text.trim());
+      await prefs.setString('saved_password', passwordController.text.trim());
+      await prefs.setBool('remember_me', true);
+    } else {
+      await prefs.remove('saved_email');
+      await prefs.remove('saved_password');
+      await prefs.remove('remember_me');
     }
   }
 
@@ -85,7 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     try {
       final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -139,10 +167,19 @@ class _AuthScreenState extends State<AuthScreen> {
           await user.sendEmailVerification();
           return;
         }
+        await _handleRememberMe();
+
+
+        // 👉 Add this to get the name
+        final uid = FirebaseAuth.instance.currentUser?.uid;
+        final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final name = doc.data()?['name'] ?? 'User';
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_name', name);
 
         print('User logged in: ${user.email}');
         Navigator.pushReplacementNamed(
-            context, '/home'); // Redirect to home after login
+            context, '/market'); // Redirect to home after login
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage = "Invalid email or password. Please try again.";
@@ -269,7 +306,20 @@ class _AuthScreenState extends State<AuthScreen> {
 
                   // ---- Password Field ----
                   _buildPasswordField(),
-
+                  if (isLogin)
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              _rememberMe = value!;
+                            });
+                          },
+                        ),
+                        const Text("Remember Me"),
+                      ],
+                    ),
                   // ---- Forgot Password Link (only if Login) ----
                   if (isLogin)
                     Align(
@@ -283,6 +333,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           );
                         },
+
                         child: const Text(
                           "Forgot Password?",
                           style: TextStyle(
@@ -437,25 +488,50 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  void _showVerificationDialog(BuildContext context, User? user) {
+  void _showVerificationDialog(BuildContext context, User user) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Verification"),
-          content: Text("Please verify your email, ${user?.email ?? 'User'}"),
+          title: const Text("Verify Email"),
+          content: Text(
+              "A verification email has been sent to ${user.email}. Please verify and click the button below."),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                await user.reload();
+                User? refreshedUser = FirebaseAuth.instance.currentUser;
+
+                if (refreshedUser != null && refreshedUser.emailVerified) {
+                  // سجل المستخدم في Firestore الآن فقط بعد التأكد من التحقق
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(refreshedUser.uid)
+                      .set({
+                    'name': nameController.text.trim(),
+                    'email': refreshedUser.email,
+                    'createdAt': Timestamp.now(),
+                    'verified': true,
+                  });
+
+                  Navigator.of(context).pop(); // Close dialog
+                  Navigator.pushReplacementNamed(context, '/market');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Email not verified yet. Please try again."),
+                    ),
+                  );
+                }
               },
-              child: const Text("OK"),
+              child: const Text("✔ I Verified"),
             ),
           ],
         );
       },
     );
   }
+
 
   void _showConfirmationDialog(BuildContext context, String verificationUrl,
       String device, String location, String time) {

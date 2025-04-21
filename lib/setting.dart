@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'create_account_screen.dart';
 import 'navBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 class SettingScreen extends StatefulWidget {
@@ -13,6 +16,26 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   int _currentIndex = 4; // Default selected index for the Settings screen
+  String _userName = '';
+  String _userEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = FirebaseAuth.instance.currentUser;
+
+    setState(() {
+      _userName = prefs.getString('user_name') ?? (user?.displayName ?? 'User');
+      _userEmail = user?.email ?? 'email@example.com';
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +69,8 @@ class _SettingScreenState extends State<SettingScreen> {
                           padding: EdgeInsets.all(2),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image.network(
-                              'https://images.unsplash.com/photo-1488161628813-04466f872be2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxMXx8bWFufGVufDB8fHx8MTczOTkxNzM4Mnww&ixlib=rb-4.0.3&q=80&w=1080',
+                            child: Image.asset(
+                              'assets/person.jpg', // غيّر المسار حسب اسم الملف اللي عندك
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
@@ -62,8 +85,8 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 12),
-              child: Text(
-                'David Jerome',
+              child:Text(
+                _userName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
@@ -76,7 +99,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
               child: Text(
-                'David.j@gmail.com',
+                _userEmail,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
                   color: Color(0xFFCCFFFFFF),
@@ -84,6 +107,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+
             ),
             Expanded(
               child: Container(
@@ -124,7 +148,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             children: [
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
                                 child: Text('Settings',
                                     style: TextStyle(
                                       fontFamily: 'Inter Tight',
@@ -133,7 +157,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -170,7 +194,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -201,7 +225,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -232,7 +256,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -269,7 +293,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -363,11 +387,11 @@ class SettingsItem extends StatelessWidget {
       title: Text(title, style: const TextStyle(fontSize: 16)),
       trailing: trailingText != null
           ? Text(
-              trailingText!,
-              style: TextStyle(
-                  color: isLogout ? Colors.red : AppStyles.primarybackground,
-                  fontWeight: FontWeight.bold),
-            )
+        trailingText!,
+        style: TextStyle(
+            color: isLogout ? Colors.red : AppStyles.primarybackground,
+            fontWeight: FontWeight.bold),
+      )
           : null,
       onTap: onTap, // Use the provided onTap callback
     );
