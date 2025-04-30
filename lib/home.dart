@@ -49,21 +49,21 @@ class home extends StatelessWidget {
       bottomNavigationBar: const ButtomNavbar(currentIndex: 0),
 
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to the chatbot page when the button is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    ChatBotScreen()), // Replace with actual chat bot page
-          );
-        },
-        backgroundColor: Color(0xFF317A8B), // Color for the chat icon
-        child: const Icon(Icons.chat, color: Colors.white), // Chat icon
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation
-          .endFloat, // Position the button in the bottom right corner
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Navigate to the chatbot page when the button is pressed
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) =>
+      //               ChatBotScreen()), // Replace with actual chat bot page
+      //     );
+      //   },
+      //   backgroundColor: Color(0xFF317A8B), // Color for the chat icon
+      //   child: const Icon(Icons.chat, color: Colors.white), // Chat icon
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation
+      //     .endFloat, // Position the button in the bottom right corner
     );
   }
 }

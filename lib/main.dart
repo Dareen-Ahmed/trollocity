@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/createAccount': (context) => const AuthScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
         '/home': (context) => const home(), // HomeScreen
-        '/markets': (context) => const market(), // MarketScreen
+        '/markets': (context) => const Market(), // MarketScreen
 
       },
     );
