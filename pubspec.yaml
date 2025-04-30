@@ -55,6 +55,8 @@ dependencies:
   image_picker: ^1.1.2
   firebase_database: ^11.3.4
   flutter_blue_classic: ^0.0.4
+  provider: ^6.1.4
+
   dash_chat_2: ^0.0.21
   chat_gpt_sdk: ^3.1.4
   flutter_local_notifications: ^19.1.0
