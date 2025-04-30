@@ -37,13 +37,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/', // Set the initial screen
+      home: FirebaseAuth.instance.currentUser == null ? AuthScreen() : SplashScreen(),
       routes: {
-        '/': (context) => const SplashScreen(),
         '/createAccount': (context) => const AuthScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
-        '/home': (context) => const home(),
-        '/markets': (context) => const market(),
+        '/home': (context) => const home(), // HomeScreen
+        '/markets': (context) => const market(), // MarketScreen
+
       },
     );
   }

@@ -2,29 +2,25 @@ import 'package:flutter/material.dart';
 import 'app_styles.dart';
 import 'home.dart'; // Import the home screen
 
-class market extends StatelessWidget {
-  const market({super.key});
+class Market extends StatelessWidget {
+  const Market({super.key});
 
   final List<Map<String, String>> markets = const [
     {
       'name': 'Metro Market',
-      'imageUrl':
-      'https://metro-website-images.s3.eu-west-1.amazonaws.com/plugins/user/images/about9.png'
+      'imageUrl': 'assets/MarketPage/Metro.jpg', // Replace with the path to your asset
     },
     {
       'name': 'BIM Supermarket',
-      'imageUrl':
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61EUQZljkUmHixEXizXs9LHJE4FUl64vNAA&s'
+      'imageUrl': 'assets/MarketPage/bim.jpg', // Replace with the path to your asset
     },
     {
       'name': 'Seoudi Supermarket',
-      'imageUrl':
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbnUd9SAlHcY8AJTI2YuC7SPejtFbfidH_aQ&s'
+      'imageUrl': 'assets/MarketPage/seoudi.jpg', // Replace with the path to your asset
     },
     {
       'name': 'Royal House',
-      'imageUrl':
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoJA_4EXUmMaNYRgEUoXI42fWZMUqQDipCMByVYP3hh7magNnK-j7TDE2ieQ3UCUMSIE4&usqp=CAU'
+      'imageUrl': 'assets/MarketPage/royalhouse.jpg', // Replace with the path to your asset
     },
   ];
 
@@ -33,12 +29,9 @@ class market extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
-        backgroundColor:AppStyles.primarybackground,
+        backgroundColor: AppStyles.primarybackground,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false, // Remove the back arrow
         title: const Text(
           'Markets',
           style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
@@ -88,10 +81,10 @@ class market extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              markets[index]['imageUrl']!,
-                              width: 100, // Increased image width
-                              height: 100, // Increased image height
+                            child: Image.asset(
+                              markets[index]['imageUrl']!, // Use asset image
+                              width: 100,
+                              height: 100,
                               fit: BoxFit.cover,
                             ),
                           ),
