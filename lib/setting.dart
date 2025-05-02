@@ -1,44 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
+import 'package:provider/provider.dart';
 import 'authentication/create_account_screen.dart';
+import 'provider/user_provider.dart';
 import 'navBar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-class SettingScreen extends StatefulWidget {
+class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
   @override
-  _SettingScreenState createState() => _SettingScreenState();
-}
-
-class _SettingScreenState extends State<SettingScreen> {
-  int _currentIndex = 4; // Default selected index for the Settings screen
-  String _userName = '';
-  String _userEmail = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final user = FirebaseAuth.instance.currentUser;
-
-    setState(() {
-      _userName = prefs.getString('user_name') ?? (user?.displayName ?? 'User');
-      _userEmail = user?.email ?? 'email@example.com';
-    });
-  }
-
-
-
-  @override
   Widget build(BuildContext context) {
+  final userState = context.watch<UserProvider>();
+
     return Scaffold(
       backgroundColor: AppStyles.primarybackground,
       appBar: AppBar(
@@ -86,7 +59,7 @@ class _SettingScreenState extends State<SettingScreen> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 12),
               child:Text(
-                _userName,
+                userState.userName, // _userName
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
@@ -99,7 +72,8 @@ class _SettingScreenState extends State<SettingScreen> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
               child: Text(
-                _userEmail,
+                userState.userEmail, // _userEmail
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
                   color: Color(0xFFCCFFFFFF),

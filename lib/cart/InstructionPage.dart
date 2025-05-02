@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ControllerPage.dart';
-import 'app_styles.dart';
+import '../ControllerPage.dart';
+import '../app_styles.dart';
 
 class InstructionPage extends StatefulWidget {
   @override
@@ -65,16 +65,25 @@ class _InstructionPageState extends State<InstructionPage> {
                   stepTitle: "Step Two",
                   imagePath: "assets/steptwo.jpg",
                   description:
-                      "Connect your device to the car's system and confirm pairing.",
+                      "Connect your phone to the car by pairing HC-05 then enter the password 1234",
                   onNext: _goToNextStep,
                 ),
 
                 // Step Three
+                InstructionStep(
+                  stepTitle: "Step Three",
+                  imagePath: "assets/check.png",
+                  description:
+                      "Turn on the controller switch, select HC-05, and once the switch turns orange and the Bluetooth light stop glitching, your connection is successful",
+                  onNext: _goToNextStep,
+                ),
+
+                // Step Four
                InstructionStep(
                   stepTitle: "Step Three",
                   imagePath:
-                      "https://cdn-icons-png.flaticon.com/512/845/845646.png",
-                  description: "The connection is done successfully.",
+                      "assets/shopping.png",
+                  description: "We hope you have a wonderful shopping experience!",
                   onNext: () {
                     // Navigate to ControllerPage when clicking "Start Now"
                     Navigator.push(
@@ -87,10 +96,10 @@ class _InstructionPageState extends State<InstructionPage> {
             ),
           ),
 
-          // Page Indicator (3 Dots)
+          // Page Indicator (4 Dots)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(3, (index) {
+            children: List.generate(4, (index) {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 4),
                 width: _currentPage == index ? 12 : 8,
@@ -108,7 +117,6 @@ class _InstructionPageState extends State<InstructionPage> {
           SizedBox(height: 20),
         ],
       ),
-      // bottomNavigationBar: const ButtomNavbar(currentIndex: 2),
     );
   }
 }
@@ -149,8 +157,7 @@ class InstructionStep extends StatelessWidget {
           Text(description,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: Colors.black54)),
-          SizedBox(height: 30),
-          // ElevatedButton(
+          // SizedBox(height: 30),ElevatedButton(
           //   style: ElevatedButton.styleFrom(
           //     backgroundColor: AppStyles.buttonColor,
           //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -159,6 +166,7 @@ class InstructionStep extends StatelessWidget {
           //   onPressed: onNext,
           //   child: Text("Start Now", style: TextStyle(color: Colors.white, fontSize: 16)),
           // ),
+          
         ],
       ),
     );

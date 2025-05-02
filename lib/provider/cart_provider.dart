@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:graduation/services/BluetoothService.dart';
-import '../provider/product_db.dart';
+import 'package:provider/provider.dart';
+import '../cart/product_db.dart';
 
 class CartProvider extends ChangeNotifier {
   final BluetoothManager _bluetoothManager;
@@ -12,9 +13,16 @@ class CartProvider extends ChangeNotifier {
   late StreamSubscription<String> _rfidSubscription;
 
   CartProvider(this._bluetoothManager) {
+    _startListening();
     _bluetoothManager.dataStream.listen(addProductToCart);
   }
 
+  void _startListening() {
+    _rfidSubscription = _bluetoothManager.dataStream.listen((tag) {
+      addProductToCart(tag);
+    });
+  }
+  
   List<ProductDb> get products => _products;
   bool get isLoading => _isLoading;
   double get totalPrice =>

@@ -282,7 +282,7 @@
 
 // Meee
 import 'package:flutter/material.dart';
-import 'package:graduation/InstructionPage.dart';
+import 'package:graduation/cart/InstructionPage.dart';
 import 'package:graduation/app_styles.dart';
 import 'package:flutter_blue_classic/flutter_blue_classic.dart';
 import 'dart:async';

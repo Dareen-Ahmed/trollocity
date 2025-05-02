@@ -8,19 +8,19 @@ class Market extends StatelessWidget {
   final List<Map<String, String>> markets = const [
     {
       'name': 'Metro Market',
-      'imageUrl': 'assets/MarketPage/Metro.jpg', // Replace with the path to your asset
+      'imageUrl': 'assets/MarketPage/Metro.jpg', 
     },
     {
       'name': 'BIM Supermarket',
-      'imageUrl': 'assets/MarketPage/bim.jpg', // Replace with the path to your asset
+      'imageUrl': 'assets/MarketPage/bim.jpg', 
     },
     {
       'name': 'Seoudi Supermarket',
-      'imageUrl': 'assets/MarketPage/seoudi.jpg', // Replace with the path to your asset
+      'imageUrl': 'assets/MarketPage/seoudi.jpg', 
     },
     {
       'name': 'Royal House',
-      'imageUrl': 'assets/MarketPage/royalhouse.jpg', // Replace with the path to your asset
+      'imageUrl': 'assets/MarketPage/royalhouse.jpg', 
     },
   ];
 
@@ -31,7 +31,7 @@ class Market extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppStyles.primarybackground,
         elevation: 0,
-        automaticallyImplyLeading: false, // Remove the back arrow
+        automaticallyImplyLeading: false,
         title: const Text(
           'Markets',
           style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
@@ -55,10 +55,10 @@ class Market extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two items per row
-                  crossAxisSpacing: 16, // Space between columns
-                  mainAxisSpacing: 16, // Space between rows
-                  childAspectRatio: 0.8, // Adjusted for larger boxes
+                  crossAxisCount: 2, 
+                  crossAxisSpacing: 16, 
+                  mainAxisSpacing: 16, 
+                  childAspectRatio: 0.8, 
                 ),
                 itemCount: markets.length,
                 itemBuilder: (context, index) {

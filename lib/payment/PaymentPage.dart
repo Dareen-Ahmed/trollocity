@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graduation/app_styles.dart';
-import 'package:graduation/cart/provider/product_db.dart';
+import 'package:provider/provider.dart';
+import '../cart/product_db.dart';
+import '../provider/cart_provider.dart';
 import 'PaymentConfirmationPage.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -81,15 +83,38 @@ class _PaymentPageState extends State<PaymentPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(width: 18, height: 18, decoration: BoxDecoration(color: Color(0xFFDE5902), shape: BoxShape.circle)),
-                    Container(width: 100, height: 2, decoration: BoxDecoration(color: Color(0xFF317A8B))),
-                    Container(width: 25, height: 25, decoration: BoxDecoration(color: Color(0xFFDE5902), shape: BoxShape.circle)),
-                    Container(width: 100, height: 2, decoration: BoxDecoration(color: Color(0xFF317A8B))),
-                    Container(width: 18, height: 18, decoration: BoxDecoration(color: Color(0xFFDE5902), shape: BoxShape.circle)),
+                    Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFDE5902), shape: BoxShape.circle)),
+                    Container(
+                        width: 100,
+                        height: 2,
+                        decoration: BoxDecoration(color: Color(0xFF317A8B))),
+                    Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFDE5902), shape: BoxShape.circle)),
+                    Container(
+                        width: 100,
+                        height: 2,
+                        decoration: BoxDecoration(color: Color(0xFF317A8B))),
+                    Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFDE5902), shape: BoxShape.circle)),
                   ],
                 ),
                 SizedBox(height: 20),
-                Center(child: Text('Payment', style: TextStyle(fontFamily: 'Inter', color: Color(0xFFDE5902), fontSize: 25))),
+                Center(
+                    child: Text('Payment',
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Color(0xFFDE5902),
+                            fontSize: 25))),
                 SizedBox(height: 20),
 
                 // Name
@@ -101,9 +126,11 @@ class _PaymentPageState extends State<PaymentPage> {
                     hintText: 'Enter your name',
                     filled: true,
                     fillColor: Colors.white,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
                   ),
-                  validator: (value) => value!.isEmpty ? "Please enter your name" : null,
+                  validator: (value) =>
+                      value!.isEmpty ? "Please enter your name" : null,
                   onChanged: (_) => validateForm(),
                 ),
                 SizedBox(height: 20),
@@ -111,22 +138,29 @@ class _PaymentPageState extends State<PaymentPage> {
                 // Card Number
                 Text('Card Info', style: TextStyle(fontSize: 16)),
                 SizedBox(height: 5),
-                Text('Card number', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                Text('Card number',
+                    style: TextStyle(fontSize: 14, color: Colors.grey)),
                 TextFormField(
                   controller: cardNumberController,
                   decoration: InputDecoration(
                     hintText: '●●●● ●●●● ●●●● ●●●●',
                     filled: true,
                     fillColor: Colors.white,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
                     counterText: '',
                   ),
                   keyboardType: TextInputType.number,
                   maxLength: 19,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, CardNumberFormatter()],
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CardNumberFormatter()
+                  ],
                   validator: (value) {
-                    if (value == null || value.isEmpty) return "Card number is required";
-                    else if (value.length != 19) return "Card number must be 16 digits with spaces";
+                    if (value == null || value.isEmpty)
+                      return "Card number is required";
+                    else if (value.length != 19)
+                      return "Card number must be 16 digits with spaces";
                     return null;
                   },
                   onChanged: (_) => validateForm(),
@@ -140,17 +174,23 @@ class _PaymentPageState extends State<PaymentPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Exp. Date', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                          Text('Exp. Date',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey)),
                           TextFormField(
                             controller: expDateController,
                             decoration: InputDecoration(
                               hintText: 'MM/YY',
                               filled: true,
                               fillColor: Colors.white,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
                             ),
                             keyboardType: TextInputType.datetime,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly, ExpDateFormatter()],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              ExpDateFormatter()
+                            ],
                             validator: validateExpDate,
                             onChanged: (_) => validateForm(),
                           ),
@@ -162,19 +202,26 @@ class _PaymentPageState extends State<PaymentPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('CVV', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                          Text('CVV',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey)),
                           TextFormField(
                             controller: cvvController,
                             decoration: InputDecoration(
                               hintText: '●●●',
                               filled: true,
                               fillColor: Colors.white,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
                             ),
                             keyboardType: TextInputType.number,
                             maxLength: 3,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            validator: (value) => value!.length != 3 ? "CVV must be 3 digits" : null,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validator: (value) => value!.length != 3
+                                ? "CVV must be 3 digits"
+                                : null,
                             onChanged: (_) => validateForm(),
                           ),
                         ],
@@ -196,70 +243,102 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ],
                 ),
-                Text('Your card information is safe with us', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                Text('Your card information is safe with us',
+                    style: TextStyle(fontSize: 12, color: Colors.grey)),
                 SizedBox(height: 20),
 
                 // Totals
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Subtotal', style: TextStyle(fontSize: 16)),
-                  Text('${widget.totalAmount.toStringAsFixed(0)} EGP', style: TextStyle(fontSize: 16)),
-                ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Subtotal', style: TextStyle(fontSize: 16)),
+                      Text('${widget.totalAmount.toStringAsFixed(0)} EGP',
+                          style: TextStyle(fontSize: 16)),
+                    ]),
                 SizedBox(height: 10),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Promo Code', style: TextStyle(fontSize: 16)),
-                  Text('Enter code Here >', style: TextStyle(fontSize: 16, color: Color(0xFFDE5902))),
-                ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Promo Code', style: TextStyle(fontSize: 16)),
+                      Text('Enter code Here >',
+                          style: TextStyle(
+                              fontSize: 16, color: Color(0xFFDE5902))),
+                    ]),
                 SizedBox(height: 10),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Grand Total', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('${widget.totalAmount.toStringAsFixed(0)} EGP', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Grand Total',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text('${widget.totalAmount.toStringAsFixed(0)} EGP',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                    ]),
                 SizedBox(height: 20),
 
                 // Confirm button
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isFormValid ? Color(0xFFDE5902) : Colors.grey,
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 80),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      backgroundColor:
+                          isFormValid ? Color(0xFFDE5902) : Colors.grey,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 80),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                     ),
                     onPressed: isFormValid
                         ? () async {
-                      try {
-                        final uid = FirebaseAuth.instance.currentUser?.uid;
+                            try {
+                              final uid =
+                                  FirebaseAuth.instance.currentUser?.uid;
 
-                        final products = widget.cartItems.map((item) => {
-                          'name': item.name,
-                          'price': item.price,
-                          'quantity': item.quantity,
-                          'description': item.description,
-                          'image': item.imageUrl,
-                        }).toList();
+                              final products = widget.cartItems
+                                  .map((item) => {
+                                        'name': item.name,
+                                        'price': item.price,
+                                        'quantity': item.quantity,
+                                        'description': item.description,
+                                        'image': item.imageUrl,
+                                      })
+                                  .toList();
 
-                        await FirebaseFirestore.instance.collection('payments').add({
-                          'name': nameController.text.trim(),
-                          'cardNumber': cardNumberController.text.trim(),
-                          'expDate': expDateController.text.trim(),
-                          'cvv': cvvController.text.trim(),
-                          'totalAmount': widget.totalAmount.toString(),
-                          'uid': uid,
-                          'saved': isSaved,
-                          'timestamp': FieldValue.serverTimestamp(),
-                          'items': products,
-                        });
+                              await FirebaseFirestore.instance
+                                  .collection('payments')
+                                  .add({
+                                'name': nameController.text.trim(),
+                                'cardNumber': cardNumberController.text.trim(),
+                                'expDate': expDateController.text.trim(),
+                                'cvv': cvvController.text.trim(),
+                                'totalAmount': widget.totalAmount.toString(),
+                                'uid': uid,
+                                'saved': isSaved,
+                                'timestamp': FieldValue.serverTimestamp(),
+                                'items': products,
+                              });
 
-                        // ✅ التنقل لصفحة التأكيد
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => PaymentConfirmationPage()),
-                        );
-                      } catch (e) {
-                        print('Error saving order: $e');
-                      }
-                    }
+                              // Clear the cart after payment
+                              final cartProvider =
+                                  Provider.of<CartProvider>(context,
+                                      listen: false);
+                                      cartProvider.removeAll();
+                                      
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => PaymentConfirmationPage()),
+                              );
+                            } catch (e) {
+                              print('Error saving order: $e');
+                            }
+                          }
                         : null,
-                    child: Text('Confirm', style: TextStyle(fontSize: 18, color: Colors.white, fontFamily: 'Inter Tight')),
+                    child: Text('Confirm',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'Inter Tight')),
                   ),
                 ),
               ],
@@ -271,10 +350,10 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 }
 
-// ✅ فورماتر رقم البطاقة
 class CardNumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     String text = newValue.text.replaceAll(RegExp(r'\D'), '');
     StringBuffer formattedText = StringBuffer();
     for (int i = 0; i < text.length; i++) {
@@ -291,7 +370,8 @@ class CardNumberFormatter extends TextInputFormatter {
 // ✅ فورماتر تاريخ الانتهاء
 class ExpDateFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     String text = newValue.text.replaceAll(RegExp(r'\D'), '');
     if (text.length >= 2 && !text.contains('/')) {
       text = text.substring(0, 2) + '/' + text.substring(2);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
-import 'package:graduation/cart/provider/product_db.dart';
-import 'package:graduation/cart/provider/provider.dart';
 import 'package:provider/provider.dart';
 import '../navBar.dart';
 import '../payment/PaymentMethods.dart';
+import '../provider/cart_provider.dart';
+import 'product_db.dart';
 
 class Cart extends StatefulWidget {
   @override

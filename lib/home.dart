@@ -2,20 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation/app_styles.dart';
 import 'package:graduation/navBar.dart';
+import 'package:provider/provider.dart';
 import 'SearchResultsPage.dart';
 import 'wishlist.dart';
-import 'ChatBotScreen.dart';
 import 'Mango.dart';
 import 'PersonalCarePage.dart';
 import 'SpecialOffersPage.dart';
 import 'Strawberry.dart';
 import 'notification.dart';
+import 'package:graduation/provider/user_provider.dart';
 
 class home extends StatelessWidget {
   const home({super.key});
 
   @override
   Widget build(BuildContext context) {
+  // final userState = context.watch<UserProvider>();
     final List<String> categories = [
       "Fruits",
       "Vegetables",
@@ -47,23 +49,6 @@ class home extends StatelessWidget {
       ),
 
       bottomNavigationBar: const ButtomNavbar(currentIndex: 0),
-
-
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Navigate to the chatbot page when the button is pressed
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) =>
-      //               ChatBotScreen()), // Replace with actual chat bot page
-      //     );
-      //   },
-      //   backgroundColor: Color(0xFF317A8B), // Color for the chat icon
-      //   child: const Icon(Icons.chat, color: Colors.white), // Chat icon
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation
-      //     .endFloat, // Position the button in the bottom right corner
     );
   }
 }
@@ -82,7 +67,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hi ,',
+            'Hi, ${context.watch<UserProvider>().userName}',
             style: AppStyles.appBarGreeting,
           ),
           Row(

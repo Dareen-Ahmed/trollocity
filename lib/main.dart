@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'authentication/forgotpassword.dart';
-import 'cart/provider/provider.dart';
+import 'provider/user_provider.dart';
+import 'provider/cart_provider.dart';
 import 'services/BluetoothService.dart';
 import 'splash_screen.dart';
 import 'authentication/create_account_screen.dart';
@@ -11,6 +12,7 @@ import 'home.dart';
 import 'market.dart';
 
 void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -22,12 +24,14 @@ void main() async {
     }
   });
 
-  runApp(MultiProvider(providers: [
-    // Provider(create: (context)=> CartProvider()),
-    ChangeNotifierProvider(
-      create: (_) => CartProvider(BluetoothManager()),
-    ),
-  ], child: const MyApp()));
+    final bluetoothManager = BluetoothManager(); // Initialize BluetoothManager
+    await bluetoothManager.initBluetooth(); 
+
+  runApp(MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (_) => CartProvider(bluetoothManager),),
+    ChangeNotifierProvider(create: (_) => UserProvider(),),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,8 +45,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/createAccount': (context) => const AuthScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
-        '/home': (context) => const home(), // HomeScreen
-        '/markets': (context) => const Market(), // MarketScreen
+        '/home': (context) => const home(), 
+        '/market': (context) => const Market(),
 
       },
     );
