@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 import 'package:provider/provider.dart';
 import '../cart/product_db.dart';
 import '../provider/cart_provider.dart';

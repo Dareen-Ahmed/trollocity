@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
-import 'package:graduation/market.dart';
+import 'package:trollocity/app_styles.dart';
+import 'package:trollocity/market.dart';
 
 
 class change_password extends StatefulWidget {

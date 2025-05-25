@@ -8,19 +8,19 @@ class Market extends StatelessWidget {
   final List<Map<String, String>> markets = const [
     {
       'name': 'Metro Market',
-      'imageUrl': 'assets/MarketPage/Metro.jpg', 
+      'imageUrl': 'assets/MarketPage/Metro.jpg',
     },
     {
       'name': 'BIM Supermarket',
-      'imageUrl': 'assets/MarketPage/bim.jpg', 
+      'imageUrl': 'assets/MarketPage/bim.jpg',
     },
     {
       'name': 'Seoudi Supermarket',
-      'imageUrl': 'assets/MarketPage/seoudi.jpg', 
+      'imageUrl': 'assets/MarketPage/seoudi.jpg',
     },
     {
       'name': 'Royal House',
-      'imageUrl': 'assets/MarketPage/royalhouse.jpg', 
+      'imageUrl': 'assets/MarketPage/royalhouse.jpg',
     },
   ];
 
@@ -43,6 +43,7 @@ class Market extends StatelessWidget {
           const SizedBox(height: 10),
           const Text(
             'Choose Your Market',
+            key: Key('market_title'), // ✅ تم إضافة هذا المفتاح
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -55,10 +56,10 @@ class Market extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, 
-                  crossAxisSpacing: 16, 
-                  mainAxisSpacing: 16, 
-                  childAspectRatio: 0.8, 
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.8,
                 ),
                 itemCount: markets.length,
                 itemBuilder: (context, index) {
@@ -82,7 +83,7 @@ class Market extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
-                              markets[index]['imageUrl']!, // Use asset image
+                              markets[index]['imageUrl']!,
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
-import 'package:graduation/navBar.dart';
+import 'package:trollocity/app_styles.dart';
+import 'package:trollocity/navBar.dart';
 import 'package:provider/provider.dart';
 import 'SearchResultsPage.dart';
 import 'wishlist.dart';
@@ -10,7 +10,7 @@ import 'PersonalCarePage.dart';
 import 'SpecialOffersPage.dart';
 import 'Strawberry.dart';
 import 'notification.dart';
-import 'package:graduation/provider/user_provider.dart';
+import 'package:trollocity/provider/user_provider.dart';
 
 class home extends StatelessWidget {
   const home({super.key});

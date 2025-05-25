@@ -1,18 +1,28 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
+  void _handleStartButton(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && user.emailVerified) {
+      // المستخدم مسجّل دخول ومحقق من بريده
+      Navigator.pushReplacementNamed(context, '/market');
+    } else {
+      // المستخدم غير مسجّل دخول
+      Navigator.pushReplacementNamed(context, '/signIn');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-              'assets/Welcome.jpg',
-            ),
+            image: AssetImage('assets/Welcome.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -21,10 +31,10 @@ class SplashScreen extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 Colors.transparent,
-                Colors.white.withValues(alpha: 0.5),
+                Colors.white.withOpacity(0.5),
                 Colors.white,
               ],
-              stops: [0, 0.6, 1],
+              stops: const [0, 0.6, 1],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -37,34 +47,33 @@ class SplashScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 30),
                     child: Text(
                       '𝑻𝒓𝒐𝒍𝒍𝒐𝒄𝒊𝒕𝒚',
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 70,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 60),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 60),
                     child: Text(
                       'Say Goodbye to Long Queues, Hello to Smart Shopping!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 30,
-                        color: Theme.of(context).colorScheme.onBackground,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/createAccount');
-                    },
+                    key: const Key('get_started_button'), // ✅ أضف هذا المفتاح
+                    onPressed: () => _handleStartButton(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFDE5902),
                       minimumSize: const Size(250, 60),
@@ -73,8 +82,8 @@ class SplashScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(
-                      "let's get started",
+                    child: const Text(
+                      "Let's Get Started",
                       style: TextStyle(
                         fontFamily: 'Inter Tight',
                         color: Colors.white,

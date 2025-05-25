@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 
 class Strawberry extends StatelessWidget {
   final String productName;

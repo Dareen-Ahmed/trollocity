@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 import 'package:provider/provider.dart';
 import '../navBar.dart';
 import '../payment/PaymentMethods.dart';

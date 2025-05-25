@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 import '../cart/product_db.dart';
 import 'PaymentPage.dart';
 // import 'models/cart_item_data.dart'; // ✅ تم الاستيراد من الملف الخارجي

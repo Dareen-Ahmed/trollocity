@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final Map<String, dynamic> orderData;

@@ -1,4 +1,5 @@
-name: graduation
+name: trollocity
+
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -30,6 +31,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  integration_test:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -57,14 +60,19 @@ dependencies:
   flutter_blue_classic: ^0.0.4
   provider: ^6.1.4
 
-  dash_chat_2: ^0.0.21
-  chat_gpt_sdk: ^3.1.4
-  flutter_local_notifications: ^19.1.0
+#  dash_chat_2: ^0.0.21
+#  chat_gpt_sdk: ^3.1.4
+#  flutter_local_notifications: ^19.1.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+integration_test:
+  sdk: flutter
+  flutter_driver:
+    sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

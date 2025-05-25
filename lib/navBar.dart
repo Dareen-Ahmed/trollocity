@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/ControllerPage.dart';
-import 'package:graduation/OrderHistoryPage.dart';
+import 'package:trollocity/ControllerPage.dart';
+import 'package:trollocity/OrderHistoryPage.dart';
 // import 'package:graduation/cart/MyCart.dart';
-import 'package:graduation/home.dart';
-import 'package:graduation/setting.dart';
+import 'package:trollocity/home.dart';
+import 'package:trollocity/setting.dart';
 
 import 'app_styles.dart';
 import 'cart/Cart_ui.dart'; // Import your styles

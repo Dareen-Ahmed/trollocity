@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:graduation/app_styles.dart';
+import 'package:trollocity/app_styles.dart';
 import 'package:provider/provider.dart';
 import 'authentication/create_account_screen.dart';
+import 'authentication/sign_in_screen.dart'; // استيراد الشاشة الصحيحة
 import 'provider/user_provider.dart';
 import 'navBar.dart';
 
@@ -10,7 +11,7 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final userState = context.watch<UserProvider>();
+    final userState = context.watch<UserProvider>();
 
     return Scaffold(
       backgroundColor: AppStyles.primarybackground,
@@ -58,7 +59,7 @@ class SettingScreen extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 12),
-              child:Text(
+              child: Text(
                 userState.userName, // _userName
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -81,7 +82,6 @@ class SettingScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-
             ),
             Expanded(
               child: Container(
@@ -299,7 +299,7 @@ class SettingScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AuthScreen()), // Or CreateAccountScreen if different
+                                                  SignInScreen()), // استبدال AuthScreen بـ SignInScreen
                                         );
                                       },
                                       child: MouseRegion(
@@ -333,41 +333,6 @@ class SettingScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const ButtomNavbar(currentIndex: 4),
-    );
-  }
-}
-
-// Reusable Settings Item Widget
-class SettingsItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? trailingText;
-  final bool isLogout;
-  final VoidCallback? onTap;
-
-  const SettingsItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    this.trailingText,
-    this.isLogout = false,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.grey[700]),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      trailing: trailingText != null
-          ? Text(
-        trailingText!,
-        style: TextStyle(
-            color: isLogout ? Colors.red : AppStyles.primarybackground,
-            fontWeight: FontWeight.bold),
-      )
-          : null,
-      onTap: onTap, // Use the provided onTap callback
     );
   }
 }
