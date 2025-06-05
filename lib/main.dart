@@ -2,13 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'authentication/sign_in_screen.dart'; // تم تعديل المسار إلى SignInScreen
+import 'package:showcaseview/showcaseview.dart'; // ✅ إضافة ShowCase
+import 'authentication/sign_in_screen.dart';
 import 'authentication/forgotpassword.dart';
 import 'provider/user_provider.dart';
 import 'provider/cart_provider.dart';
 import 'services/BluetoothService.dart';
 import 'splash_screen.dart';
-import 'authentication/create_account_screen.dart'; // صفحة إنشاء الحساب
+import 'authentication/create_account_screen.dart';
 import 'home.dart';
 import 'market.dart';
 
@@ -27,13 +28,19 @@ void main() async {
   final bluetoothManager = BluetoothManager(); // Initialize BluetoothManager
   await bluetoothManager.initBluetooth();
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => CartProvider(bluetoothManager),),
-      ChangeNotifierProvider(create: (_) => UserProvider(),),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    ShowCaseWidget( // ✅ تغليف التطبيق بـ ShowCaseWidget
+      builder: (context) => Builder(
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => CartProvider(bluetoothManager)),
+            ChangeNotifierProvider(create: (_) => UserProvider()),
+          ],
+          child: const MyApp(),
+        ),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -43,7 +50,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const SignInScreen(), // ✅ عرض شاشة تسجيل الدخول مباشرة
+      home: const SignInScreen(),
       routes: {
         '/createAccount': (context) => const CreateAccountScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
@@ -54,4 +61,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

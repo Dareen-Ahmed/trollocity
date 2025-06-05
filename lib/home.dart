@@ -17,7 +17,6 @@ class home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  // final userState = context.watch<UserProvider>();
     final List<String> categories = [
       "Fruits",
       "Vegetables",
@@ -29,9 +28,10 @@ class home extends StatelessWidget {
       "Snacks",
       "Chicken"
     ];
+
     return Scaffold(
       appBar: const HomePageAppBar(),
-      backgroundColor: AppStyles.backgroundColor, // Set background color to white
+      backgroundColor: AppStyles.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,11 +47,14 @@ class home extends StatelessWidget {
           ],
         ),
       ),
-
-      bottomNavigationBar: const ButtomNavbar(currentIndex: 0),
+      bottomNavigationBar: ButtomNavbar(
+        currentIndex: 0,
+        showcaseContext: context, // ✅ فعل هذا لإطلاق ShowCase من navBar
+      ),
     );
   }
 }
+
 
 class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomePageAppBar({super.key});
