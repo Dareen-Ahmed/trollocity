@@ -31,7 +31,7 @@ class BluetoothManager {
   // Add public getter for FlutterBlue instance
   FlutterBlueClassic get flutterBlue => _flutterBlue;
 
-// Getter for connection status
+  // Getter for connection status
   bool get isConnected => isConnectedNotifier.value;
 
   // Getter for selected device
@@ -73,12 +73,21 @@ class BluetoothManager {
     _connection = null;
   }
 
-  // Handle incoming data from the Bluetooth device
   void _handleIncomingData(Uint8List data) async {
-    final receivedString =
-        String.fromCharCodes(data).replaceAll('"', '').trim();
-    print("Received: $receivedString");
-    _dataStreamController.add(receivedString); // Add this line
+    final rawString = String.fromCharCodes(data);
+    final receivedString = rawString.replaceAll('"', '').trim();
+
+    print("🟢 BluetoothService - Raw data: '$rawString'");
+    print("🟢 BluetoothService - Cleaned data: '$receivedString'");
+    print(
+        "🟢 BluetoothService - Stream listeners: ${_dataStreamController.hasListener}");
+
+    if (receivedString.isNotEmpty) {
+      _dataStreamController.add(receivedString);
+      print("🟢 BluetoothService - Data sent to stream: '$receivedString'");
+    } else {
+      print("🟡 BluetoothService - Empty data, not sending to stream");
+    }
   }
 
   // Send a command to the connected Bluetooth device
