@@ -341,8 +341,8 @@ class ReceiptSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartProvider = context.watch<CartProvider>();
     final subtotal = cartProvider.totalPrice;
-    final discount = subtotal * 0.15;
-    final total = subtotal - discount;
+    // final discount = subtotal * 0.15;
+    final total = subtotal;
 
     return Card(
       color: Colors.white,
