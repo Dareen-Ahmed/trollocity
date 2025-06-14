@@ -87,92 +87,94 @@ class Strawberry extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             top: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
-                    width: double.infinity,
-                    height: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: image.startsWith('http')
-                            ? NetworkImage(image)
-                            : AssetImage(image) as ImageProvider,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x33000000),
-                          offset: Offset(0, 2),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Container(
+                      width: double.infinity,
+                      height: 350,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: image.startsWith('http')
+                              ? NetworkImage(image)
+                              : AssetImage(image) as ImageProvider,
                         ),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 4,
+                            color: Color(0x33000000),
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Name & Price
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(name,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w600)),
+                        Text('$price EGP',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: AppStyles.textGrey)),
                       ],
                     ),
                   ),
-                ),
 
-                // Name & Price
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(name,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600)),
-                      Text('$price EGP',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: AppStyles.textGrey)),
-                    ],
+                  const Divider(thickness: 2, color: Color(0xffe0e3e7)),
+
+                  // Details label
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    child: Text('Details',
+                        style:
+                        TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
                   ),
-                ),
 
-                const Divider(thickness: 2, color: Color(0xffe0e3e7)),
+                  // Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(description, style: AppStyles.bodyText),
+                  ),
 
-                // Details label
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                  child: Text('Details',
-                      style:
-                      TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
-                ),
+                  const Divider(thickness: 2, color: Color(0xffe0e3e7)),
 
-                // Description
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(description, style: AppStyles.bodyText),
-                ),
-
-                const Divider(thickness: 2, color: Color(0xffe0e3e7)),
-
-                // Add to wishlist button
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: ElevatedButton(
-                      onPressed: () => addToWishlist(context, data),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(280, 60),
-                        backgroundColor: AppStyles.buttonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  // Add to wishlist button
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: ElevatedButton(
+                        onPressed: () => addToWishlist(context, data),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(280, 60),
+                          backgroundColor: AppStyles.buttonColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
+                        child: Text('Add to WishList',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w700,
+                                color: AppStyles.textLight)),
                       ),
-                      child: Text('Add to WishList',
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                              color: AppStyles.textLight)),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

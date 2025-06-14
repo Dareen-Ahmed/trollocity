@@ -11,8 +11,8 @@ class ControllerPage extends StatefulWidget {
   @override
   _ControllerPageState createState() => _ControllerPageState();
 }
+
 class _ControllerPageState extends State<ControllerPage> {
-  // Keep only these Bluetooth-related variables
   final BluetoothManager _bluetoothManager = BluetoothManager();
   List<BluetoothDevice> _bondedDevices = [];
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
@@ -22,7 +22,7 @@ class _ControllerPageState extends State<ControllerPage> {
     super.initState();
     _bluetoothManager.isConnectedNotifier.addListener(_updateUI);
     _initBluetooth();
-    _bluetoothManager.initBluetooth(); // Initialize the manager
+    _bluetoothManager.initBluetooth();
   }
 
   @override
@@ -42,8 +42,8 @@ class _ControllerPageState extends State<ControllerPage> {
       await _refreshDevices();
       _adapterStateSubscription =
           _bluetoothManager.flutterBlue.adapterState.listen((state) {
-        if (state == BluetoothAdapterState.on) _refreshDevices();
-      });
+            if (state == BluetoothAdapterState.on) _refreshDevices();
+          });
     } catch (e) {
       print("Bluetooth error: $e");
     }
@@ -134,8 +134,7 @@ class _ControllerPageState extends State<ControllerPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => InstructionPage()),
+                      MaterialPageRoute(builder: (context) => InstructionPage()),
                     );
                   },
                 ),
@@ -146,124 +145,111 @@ class _ControllerPageState extends State<ControllerPage> {
       ),
       body: SafeArea(
         top: true,
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                child: Container(
-                  width: 300,
-                  height: 260,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.asset("assets/controller.jpg").image,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      'Connect to Bluetooth',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 16,
-                        letterSpacing: 0.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: AlignmentDirectional(1, -1),
-                        child: 
-                        // Switch(
-                        //   value: _bluetoothManager.isConnected,
-                        //   activeColor: Colors.orange,
-                        //   onChanged: (bool value) async {
-                        //     if (value) {
-                        //       bool deviceSelected = await selectDevice();
-                        //       if (!deviceSelected) {
-                        //         setState(() {});
-                        //       }
-                        //     } else {
-                        //       _bluetoothManager.disconnect();
-                        //     }
-                        //   },
-                        // ),
-                        Switch(
-                          value: _bluetoothManager.isConnected,
-                          activeColor: Colors.orange,
-                          onChanged: (bool value) async {
-                            if (value) {
-                              bool deviceSelected = await selectDevice();
-                              if (!deviceSelected) {
-                                setState(() {});
-                              }
-                            } else {
-                              _bluetoothManager.disconnect();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (_bluetoothManager.selectedDevice != null)
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      "Connected to: ${_bluetoothManager.selectedDevice!.name}"),
-                ),
-              SizedBox(height: 20),
-              Column(
-                children: [
-                  _arrowButton(
-                    Icons.arrow_upward,
-                    onPressed: () => _bluetoothManager.sendCommand("F"),
-                    onReleased: () => _bluetoothManager.sendCommand("S"),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _arrowButton(
-                        Icons.arrow_back,
-                        onPressed: () => _bluetoothManager.sendCommand("L"),
-                        onReleased: () => _bluetoothManager.sendCommand("S"),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+                  child: Container(
+                    width: 300,
+                    height: 260,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.asset("assets/controller.jpg").image,
                       ),
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: _bluetoothManager.isConnected
-                              ? const Color.fromARGB(255, 0, 167, 6)
-                              : Color.fromARGB(255, 206, 14, 0),
-                          shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        'Connect to Bluetooth',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16,
+                          letterSpacing: 0.0,
+                          color: Colors.black,
                         ),
                       ),
-                      _arrowButton(
-                        Icons.arrow_forward,
-                        onPressed: () => _bluetoothManager.sendCommand("R"),
-                        onReleased: () => _bluetoothManager.sendCommand("S"),
+                      Expanded(
+                        child: Align(
+                          alignment: AlignmentDirectional(1, -1),
+                          child: Switch(
+                            value: _bluetoothManager.isConnected,
+                            activeColor: Colors.orange,
+                            onChanged: (bool value) async {
+                              if (value) {
+                                bool deviceSelected = await selectDevice();
+                                if (!deviceSelected) {
+                                  setState(() {});
+                                }
+                              } else {
+                                _bluetoothManager.disconnect();
+                              }
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  _arrowButton(
-                    Icons.arrow_downward,
-                    onPressed: () => _bluetoothManager.sendCommand("B"),
-                    onReleased: () => _bluetoothManager.sendCommand("S"),
+                ),
+                if (_bluetoothManager.selectedDevice != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                        "Connected to: ${_bluetoothManager.selectedDevice!.name}"),
                   ),
-                ],
-              ),
-            ],
+                SizedBox(height: 20),
+                Column(
+                  children: [
+                    _arrowButton(
+                      Icons.arrow_upward,
+                      onPressed: () => _bluetoothManager.sendCommand("F"),
+                      onReleased: () => _bluetoothManager.sendCommand("S"),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _arrowButton(
+                          Icons.arrow_back,
+                          onPressed: () => _bluetoothManager.sendCommand("L"),
+                          onReleased: () => _bluetoothManager.sendCommand("S"),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: _bluetoothManager.isConnected
+                                ? const Color.fromARGB(255, 0, 167, 6)
+                                : Color.fromARGB(255, 206, 14, 0),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        _arrowButton(
+                          Icons.arrow_forward,
+                          onPressed: () => _bluetoothManager.sendCommand("R"),
+                          onReleased: () => _bluetoothManager.sendCommand("S"),
+                        ),
+                      ],
+                    ),
+                    _arrowButton(
+                      Icons.arrow_downward,
+                      onPressed: () => _bluetoothManager.sendCommand("B"),
+                      onReleased: () => _bluetoothManager.sendCommand("S"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
