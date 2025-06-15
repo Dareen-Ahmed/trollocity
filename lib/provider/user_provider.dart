@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -18,6 +19,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// تحميل البيانات من SharedPreferences و FirebaseAuth
   Future<void> loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     final user = FirebaseAuth.instance.currentUser;
@@ -27,7 +29,30 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Initialize and load user data
+  /// تحميل بيانات المستخدم من Firestore باستخدام uid
+  Future<void> fetchUserData(String uid) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      if (snapshot.exists) {
+        _userName = snapshot['name'] ?? 'User'; // تأكد من اسم الحقل
+        _userEmail = snapshot['email'] ?? 'email@example.com';
+
+        // حفظ الاسم في SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_name', _userName);
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+  }
+
+  // Constructor
   UserProvider() {
     loadUserInfo();
   }

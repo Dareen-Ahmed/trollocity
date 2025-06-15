@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'create_account_screen.dart';
+import 'package:provider/provider.dart'; // ✅ إضافة
+import 'package:trollocity/authentication/create_account_screen.dart';
 import 'package:trollocity/authentication/forgotpassword.dart';
+import 'package:trollocity/provider/user_provider.dart'; // ✅ تأكد من المسار الصحيح
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -31,7 +32,12 @@ class _SignInScreenState extends State<SignInScreen> {
       );
 
       final user = userCredential.user;
+
       if (user != null && user.emailVerified) {
+        // ✅ تحميل بيانات المستخدم في UserProvider
+        await context.read<UserProvider>().fetchUserData(user.uid);
+
+        // ✅ الانتقال بعد تسجيل الدخول
         Navigator.pushReplacementNamed(context, '/market');
       } else {
         _showErrorDialog("Please verify your email before signing in.");
