@@ -49,34 +49,54 @@ class MyApp extends StatelessWidget {
         '/market': (context) => const Market(),
         '/signIn': (context) => const SignInScreen(),
       },
-      home: const AuthWrapper(), // ✅ استخدم AuthWrapper بدل SignInScreen مباشرةً
+      home: const AuthWrapper(),
     );
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
 
   @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
+
+  Future<void> _checkAuth() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && user.emailVerified) {
+      // ✅ تحميل بيانات المستخدم عند بداية التطبيق
+      await Provider.of<UserProvider>(context, listen: false).fetchUserData(user.uid);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        // أثناء التحميل
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-        // المستخدم مسجّل دخول
-        if (snapshot.hasData && snapshot.data != null) {
-          return const Market();
-        }
+    final user = FirebaseAuth.instance.currentUser;
 
-        // المستخدم غير مسجّل
-        return const SignInScreen();
-      },
-    );
+    if (user != null && user.emailVerified) {
+      return const Market(); // ✅ المستخدم داخل التطبيق
+    }
+
+    return const SignInScreen(); // ✅ المستخدم مش مسجّل دخول
   }
 }

@@ -341,7 +341,7 @@ import 'package:flutter/material.dart';
 import 'package:trollocity/app_styles.dart';
 import 'package:provider/provider.dart';
 import 'authentication/create_account_screen.dart';
-import 'authentication/sign_in_screen.dart'; // استيراد الشاشة الصحيحة
+import 'authentication/sign_in_screen.dart';
 import 'provider/user_provider.dart';
 import 'navBar.dart';
 
@@ -399,7 +399,7 @@ class SettingScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 12),
               child: Text(
-                userState.userName, // _userName
+                userState.userName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
@@ -412,7 +412,7 @@ class SettingScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
               child: Text(
-                userState.userEmail, // _userEmail
+                userState.userEmail,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Inter Tight',
@@ -454,15 +454,13 @@ class SettingScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
                                 child: Text('Settings',
                                     style: TextStyle(
                                       fontFamily: 'Inter Tight',
@@ -470,8 +468,7 @@ class SettingScreen extends StatelessWidget {
                                     )),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -507,8 +504,7 @@ class SettingScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -538,8 +534,7 @@ class SettingScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -569,8 +564,7 @@ class SettingScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -606,8 +600,7 @@ class SettingScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -639,7 +632,7 @@ class SettingScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  SignInScreen()), // استبدال AuthScreen بـ SignInScreen
+                                                  SignInScreen()),
                                         );
                                       },
                                       child: MouseRegion(
