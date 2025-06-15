@@ -14,7 +14,6 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.read<CartProvider>();
     return Scaffold(
       backgroundColor: AppStyles.backgroundColor,
       appBar: AppBar(
@@ -69,28 +68,43 @@ class _CartState extends State<Cart> {
               SizedBox(height: 30),
               ReceiptSection(),
               SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppStyles.buttonColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentMethods(
-                          cartItems: cartProvider.products,
-                          totalAmount: cartProvider.totalPrice,
-                        ),
+              Consumer<CartProvider>(
+                builder: (context, cartProvider, child) {
+                  final isCartEmpty = cartProvider.products.isEmpty;
+
+                  return Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isCartEmpty
+                            ? Colors.grey.shade400
+                            : AppStyles.buttonColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                       ),
-                    );
-                  },
-                  child: Text("Continue to Checkout",
-                      style: TextStyle(color: Colors.white, fontSize: 16)),
-                ),
+                      onPressed: isCartEmpty
+                          ? null
+                          : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentMethods(
+                                    cartItems: cartProvider.products,
+                                    totalAmount: cartProvider.totalPrice,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: Text("Continue to Checkout",
+                          style: TextStyle(
+                              color: isCartEmpty
+                                  ? Colors.grey.shade600
+                                  : Colors.white,
+                              fontSize: 16)),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -327,8 +341,8 @@ class ReceiptSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartProvider = context.watch<CartProvider>();
     final subtotal = cartProvider.totalPrice;
-    final discount = subtotal * 0.15;
-    final total = subtotal - discount;
+    // final discount = subtotal * 0.15;
+    final total = subtotal;
 
     return Card(
       color: Colors.white,
@@ -353,18 +367,7 @@ class ReceiptSection extends StatelessWidget {
               ],
             ),
             SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Discount",
-                    style: TextStyle(fontSize: 16, color: Colors.red)),
-                Text("-EGP ${discount.toStringAsFixed(2)}",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red)),
-              ],
-            ),
+      
             SizedBox(height: 8),
             Divider(),
             Row(
